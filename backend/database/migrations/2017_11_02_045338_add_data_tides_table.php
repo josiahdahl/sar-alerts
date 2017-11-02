@@ -19,7 +19,6 @@ class AddDataTidesTable extends Migration
             $table->dateTimeTz('time');
             $table->float('height');
             $table->enum('high_low', ['high', 'low']);
-            $table->enum('unit', ['m', 'ft']);
             $table->timestamps();
 
             $table->foreign('data_source_id')

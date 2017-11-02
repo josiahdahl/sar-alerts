@@ -16,8 +16,8 @@ class AddDataSourceTable extends Migration
         Schema::create('data_sources', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->text('description');
             $table->string('url');
-            $table->string('api_key');
             $table->timestamps();
         });
     }

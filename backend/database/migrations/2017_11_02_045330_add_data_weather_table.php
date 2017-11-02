@@ -13,7 +13,15 @@ class AddDataWeatherTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('data_weather', function (Blueprint $table) {
+            $table->increments('id');
+            $table->float('temperature');
+            $table->string('short_description');
+            $table->string('long_description');
+            $table->float('pressure');
+            $table->float('humidity');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +31,6 @@ class AddDataWeatherTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('data_weather');
     }
 }
