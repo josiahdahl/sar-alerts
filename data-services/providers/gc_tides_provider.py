@@ -81,9 +81,10 @@ class GCTidesProvider:
         return tides
 
     def parse_predictions_tables(self):
-        tables = self.get_predictions()
-
-        table_data = list(map(self.parse_predictions_table, tables))
+        return list(
+            map(self.parse_predictions_table,
+                self.get_predictions())
+        )
 
     def get_predictions(self):
         return self.soup.find_all(self.table_test('^Times and Heights'))
