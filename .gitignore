@@ -3,3 +3,4 @@ vendor
 *.pyc
 .idea
 .vagrant
+venv
