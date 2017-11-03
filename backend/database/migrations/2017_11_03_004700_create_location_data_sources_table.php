@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDataWeatherTable extends Migration
+class CreateLocationDataSourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class AddDataWeatherTable extends Migration
      */
     public function up()
     {
-        Schema::create('data_weather', function (Blueprint $table) {
+        Schema::create('location_data_sources', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('data_source_id');
             $table->unsignedInteger('location_id');
-            $table->float('temperature');
-            $table->string('short_description');
-            $table->string('long_description');
-            $table->float('pressure');
-            $table->float('humidity');
+            $table->text('location_identifier');
             $table->timestamps();
 
+            $table->foreign('data_source_id')
+                ->references('id')
+                ->on('data_sources');
             $table->foreign('location_id')
                 ->references('id')
                 ->on('locations');
@@ -36,6 +36,6 @@ class AddDataWeatherTable extends Migration
      */
     public function down()
     {
-        Schema::drop('data_weather');
+        Schema::dropIfExists('location_data_sources');
     }
 }

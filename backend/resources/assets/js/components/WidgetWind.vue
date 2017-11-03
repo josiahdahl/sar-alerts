@@ -9,7 +9,9 @@
                      v-for="item in content.items">
                     <div class="d-flex flex-column text-center justify-content-center mx-2">
                         <div class="widget__status-label h1">{{item.direction}}</div>
-                        <div class="widget__status-data h2">{{item.speed}}</div>
+                        <div class="widget__status-data h2">{{item.speed}}
+                            <small>km/h</small>
+                        </div>
                         <div class="widget__status-data h4">{{item.location}}</div>
                     </div>
                 </div>

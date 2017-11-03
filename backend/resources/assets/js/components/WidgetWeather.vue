@@ -6,8 +6,8 @@
                      v-for="item in content.items">
                     <img class="widget__status-icon" :src="item.icon">
                     <div class="d-flex flex-column text-center justify-content-center">
-                        <div class="widget__status-label display-3">{{item.label}}&deg;</div>
-                        <div class="widget__status-data h2">{{item.data}}</div>
+                        <div class="widget__status-label display-3">{{item.temperature}}&deg;</div>
+                        <div class="widget__status-data h2">{{item.shortDescription}}</div>
                     </div>
                 </div>
             </section>

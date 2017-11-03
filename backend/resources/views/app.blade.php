@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    <script>
+      window.pageData = {!! $data !!};
+    </script>
 </head>
 <body>
 <div id="app">
