@@ -14,7 +14,7 @@ class OpenWeatherMapIntegration extends Integration implements IntegrationInterf
 {
     private $client;
     private $api_key;
-    static $api_url = 'http://api.openweathermap.org/data/2.5/weather';
+    static $api_url = 'http://api.openweathermap.org/data/2.5/';
     static $units = 'metric';
 
     /**
@@ -25,7 +25,7 @@ class OpenWeatherMapIntegration extends Integration implements IntegrationInterf
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => self::$api_url,
+            'base_uri' => self::$api_url
         ]);
         $this->api_key = getenv('OWM_API_KEY');
     }
@@ -77,14 +77,17 @@ class OpenWeatherMapIntegration extends Integration implements IntegrationInterf
      * }
      * ```
      * @param array $locations
-     * @return array
+     * @return array the response body
      */
     public function get(Array $locations)
     {
-        return array_map(function ($location) {
-            return $this->client->request('GET', $this->api_url, [
-                'query' => ['id' => 6151264, 'APPID' => $this->api_key, 'units' => $this->units],
-            ]);
-        }, $locations);
+        $locationsString = count($locations) > 1 ? implode(',', $locations) : $locations[0];
+
+        $query = ['id' => $locationsString, 'APPID' => $this->api_key, 'units' => self::$units];
+        // API Takes max 20 locations at once - handle this later
+        $response = $this->client->get('weather', [
+            'query' => $query,
+        ]);
+        return json_decode($response->getBody(), true);
     }
 }

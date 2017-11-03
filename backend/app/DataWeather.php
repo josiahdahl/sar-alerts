@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class DataWeather
+ * Weather data for a widget
+ * @package App
+ */
 class DataWeather extends Model
 {
     protected $fillable = [

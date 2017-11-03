@@ -9,7 +9,6 @@
 namespace App\Integrations;
 
 
-abstract class Integration implements IntegrationInterface
+abstract class Integration
 {
-
 }

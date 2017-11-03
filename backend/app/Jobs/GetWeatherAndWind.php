@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\DataWeather;
-use App\DataWind;
+use App\DataSource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -32,13 +31,11 @@ class GetWeatherAndWind implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param DataSource $dataSource
      * @return void
      */
-    public function handle()
+    public function handle(DataSource $dataSource)
     {
-        // This is obviously terrible once we have more than a few cities.
-        // TODO: Update a chunking system for updating API data from cities
-        $weather_items = $this->weather->all()->select('')
-        $wind_items DataWeather::all();
+
     }
 }
