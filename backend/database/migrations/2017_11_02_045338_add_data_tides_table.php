@@ -16,7 +16,8 @@ class AddDataTidesTable extends Migration
         Schema::create('data_tides', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('location_data_source_id');
-            $table->dateTime('time');
+            $table->date('date');
+            $table->time('time');
             $table->string('timezone');
             $table->float('height');
             $table->enum('high_low', ['high', 'low']);

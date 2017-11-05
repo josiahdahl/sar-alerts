@@ -39,6 +39,7 @@ class DataSourceSeeder extends Seeder
             'location_id' => $location_id,
             'location_identifier' => json_encode(['cityId' => 6151264]),
             'provides' => 'weather',
+            'endpoint' => '/api/v1/weather'
         ]);
 
         DB::table('location_data_sources')->insert([
@@ -46,6 +47,7 @@ class DataSourceSeeder extends Seeder
             'location_id' => $location_id,
             'location_identifier' => json_encode(['locationId' => 7020]),
             'provides' => 'tides',
+            'endpoint' => '/api/v1/tides'
         ]);
     }
 }

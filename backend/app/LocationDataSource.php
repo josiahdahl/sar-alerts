@@ -26,5 +26,4 @@ class LocationDataSource extends Model
     {
         return $this->belongsTo('App\DataSource');
     }
-
 }

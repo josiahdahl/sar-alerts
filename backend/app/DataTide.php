@@ -14,6 +14,7 @@ class DataTide extends Model
     protected $fillable = [
         'location_data_source_id',
         'time',
+        'date',
         'timezone',
         'height',
         'high_low',
