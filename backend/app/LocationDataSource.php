@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 class LocationDataSource extends Model
 {
     protected $fillable = ['data_source_id', 'location_id', 'location_identifier'];
+    protected $casts = [
+        'location_identifier' => 'array'
+    ];
 
     public function location()
     {
@@ -23,4 +26,5 @@ class LocationDataSource extends Model
     {
         return $this->hasOne('data_source');
     }
+
 }

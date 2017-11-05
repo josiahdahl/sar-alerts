@@ -11,8 +11,9 @@
 |
 */
 
-Route::get('/', 'AppController@index')->name('app');
-
 Auth::routes();
+
+Route::get('/', 'AppController@index')->name('app');
+Route::get('/trigger-tides', 'AppController@triggerTidesData');
 
 Route::get('/home', 'HomeController@index')->name('home');

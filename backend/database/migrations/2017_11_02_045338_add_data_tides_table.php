@@ -15,15 +15,16 @@ class AddDataTidesTable extends Migration
     {
         Schema::create('data_tides', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('data_source_id');
-            $table->dateTimeTz('time');
+            $table->unsignedInteger('location_data_source_id');
+            $table->dateTime('time');
+            $table->string('timezone');
             $table->float('height');
             $table->enum('high_low', ['high', 'low']);
             $table->timestamps();
 
-            $table->foreign('data_source_id')
+            $table->foreign('location_data_source_id')
                 ->references('id')
-                ->on('data_sources');
+                ->on('location_data_sources');
         });
     }
 
