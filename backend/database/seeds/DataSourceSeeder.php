@@ -24,6 +24,7 @@ class DataSourceSeeder extends Seeder
             'url' => 'http://tides.gc.ca/eng/station',
         ]);
 
+        // TODO: Add Beechy Head, Jordan River, and Port Renfrew locations/weather
         $location_id = DB::table('locations')->insertGetId([
             'name' => 'Sooke',
             'description' => 'A great city',
