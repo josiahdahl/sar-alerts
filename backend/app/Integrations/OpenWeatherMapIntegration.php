@@ -8,26 +8,31 @@
 
 namespace App\Integrations;
 
+use App\Contracts\Integrations\WeatherIntegrationContract;
+use App\LocationDataSource;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
-class OpenWeatherMapIntegration extends Integration implements IntegrationInterface
+class OpenWeatherMapIntegration implements WeatherIntegrationContract
 {
     private $client;
     private $api_key;
-    static $api_url = 'http://api.openweathermap.org/data/2.5/';
+    static $api_url = 'http://api.openweathermap.org/data/2.5/weather';
     static $units = 'metric';
 
     /**
      * OpenWeatherMapIntegration constructor.
      * id={{city_id}}&APPID={{api_key}}&units=metric
      * Call with ID 6151264 for Sooke
+     * @param Client $client
      */
-    public function __construct()
+    public function __construct(Client $client)
     {
-        $this->client = new Client([
-            'base_uri' => self::$api_url
-        ]);
-        $this->api_key = getenv('OWM_API_KEY');
+        $this->client = $client;
+        $this->api_key = config('services.openweathermap.key');
     }
 
     /**
@@ -76,18 +81,100 @@ class OpenWeatherMapIntegration extends Integration implements IntegrationInterf
      * "cod": 200
      * }
      * ```
-     * @param array $locations
+     * @param LocationDataSource $locationDataSource
      * @return array the response body
+     * @todo Return properly formatted responses
      */
-    public function get(Array $locations)
+    public function get(LocationDataSource $locationDataSource)
     {
-        $locationsString = count($locations) > 1 ? implode(',', $locations) : $locations[0];
+        $cityId = $locationDataSource->location_identifier['cityId'];
+        $cacheKey = "owm_{$cityId}";
+        // TODO: Return correct formatting
+        if (Cache::has($cacheKey)) {
+            Log::info("Got weather for LocationDataSource {$locationDataSource->id} from cache");
+            return $this->successResponse(Cache::get($cacheKey), $locationDataSource->id);
+        }
 
-        $query = ['id' => $locationsString, 'APPID' => $this->api_key, 'units' => self::$units];
-        // API Takes max 20 locations at once - handle this later
-        $response = $this->client->get('weather', [
+        $query = ['id' => $cityId, 'APPID' => $this->api_key, 'units' => self::$units];
+        $response = $this->client->get(self::$api_url, [
             'query' => $query,
         ]);
-        return json_decode($response->getBody(), true);
+
+        $responseData = json_decode($response->getBody(), true);
+        if ($response->getStatusCode() === 200) {
+            Log::info("Added weather for LocationDataSource {$locationDataSource->id} to cache");
+            Cache::put($cacheKey, $responseData, Carbon::now()->addMinutes(30));
+            return $this->successResponse($responseData, $locationDataSource->id);
+        } else {
+            Log::error("Error getting OpenWeatherMap data for city {$cityId}. LocationDataSource {$locationDataSource->id}", $responseData);
+            return $this->errorResponse($responseData);
+        }
+    }
+
+    private function windFromDeg($deg)
+    {
+        if ($deg < 22.5) {
+            return 'N';
+        }
+        if ($deg < 67.5) {
+            return 'NE';
+        }
+        if ($deg < 112.5) {
+            return 'E';
+        }
+        if ($deg < 157.5) {
+            return 'SE';
+        }
+        if ($deg < 202.5) {
+            return 'S';
+        }
+        if ($deg < 247.5) {
+            return 'SW';
+        }
+        if ($deg < 292.5) {
+            return 'W';
+        }
+        if ($deg < 337.5) {
+            return 'NW';
+        }
+        return 'N';
+    }
+
+    /**
+     * [
+     *  'data' => [],
+     *  'status' => 200|404???
+     *  'message' => 'Some message',
+     * ]
+     * @param array $response
+     * @param integer $id LocationDataSource id
+     * @return array
+     */
+    private function successResponse(Array $response, $id)
+    {
+        return [
+            'data' => [
+                'shortDescription' => $response['weather'][0]['main'],
+                'temperature' => $response['main']['temp'],
+                'windSpeed' => number_format(3.6 * $response['wind']['speed'], 1),
+                'windDirection' => $this->windFromDeg($response['wind']['deg']),
+                'city' => $response['name'],
+                'id' => $id,
+            ],
+            'status' => 200,
+        ];
+    }
+
+    /**
+     * @param array $response
+     * @return array
+     */
+    private function errorResponse(Array $response)
+    {
+        return [
+            'data' => [],
+            'status' => $response['cod'],
+            'message' => $response['message']
+        ];
     }
 }

@@ -14,7 +14,7 @@ use App\LocationDataSource;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
-class GCTidesIntegration extends Integration implements DataServicesIntegrationContract
+class GCTidesIntegration implements DataServicesIntegrationContract
 {
     // TODO: Move this into the .env/config
     static $api_url = 'http://localhost:5000/api/v1';
@@ -36,7 +36,7 @@ class GCTidesIntegration extends Integration implements DataServicesIntegrationC
     public function request(LocationDataSource $locationDataSource)
     {
         $identifier = $locationDataSource->location_identifier;
-        $locationId = $identifier['location_id'];
+        $locationId = $identifier['locationId'];
 
         $request = $this->client->post(self::$api_url . '/tides/gov-canada', [
             'form_params' => [

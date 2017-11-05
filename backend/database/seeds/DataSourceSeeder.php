@@ -21,7 +21,7 @@ class DataSourceSeeder extends Seeder
         $gctides_id = DB::table('data_sources')->insertGetId([
             'name' => 'GCTides',
             'description' => 'Government of Canada Tides - Weekly tide data',
-            'url' => 'http://tides.gc.ca/eng/station'
+            'url' => 'http://tides.gc.ca/eng/station',
         ]);
 
         $location_id = DB::table('locations')->insertGetId([
@@ -40,17 +40,11 @@ class DataSourceSeeder extends Seeder
             'location_identifier' => json_encode(['cityId' => 6151264]),
             'provides' => 'weather',
         ]);
-        DB::table('location_data_sources')->insert([
-            'data_source_id' => $owm_id,
-            'location_id' => $location_id,
-            'location_identifier' => json_encode(['cityId' => 6151264]),
-            'provides' => 'wind',
-        ]);
 
         DB::table('location_data_sources')->insert([
             'data_source_id' => $gctides_id,
             'location_id' => $location_id,
-            'location_identifier' => json_encode(['location_id' => 7020]),
+            'location_identifier' => json_encode(['locationId' => 7020]),
             'provides' => 'tides',
         ]);
     }

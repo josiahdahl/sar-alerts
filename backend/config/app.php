@@ -179,7 +179,7 @@ return [
 
         /* My Providers */
         App\Providers\TideProvider::class,
-        App\Providers\WeatherAndWindServiceProvider::class,
+        App\Providers\WeatherServiceProvider::class,
 
     ],
 

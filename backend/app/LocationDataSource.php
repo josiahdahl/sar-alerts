@@ -19,12 +19,12 @@ class LocationDataSource extends Model
 
     public function location()
     {
-        return $this->hasOne('location');
+        return $this->belongsTo('App\Location');
     }
 
     public function data_source()
     {
-        return $this->hasOne('data_source');
+        return $this->belongsTo('App\DataSource');
     }
 
 }
