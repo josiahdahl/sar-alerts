@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GetTides implements ShouldQueue
@@ -71,35 +72,38 @@ class GetTides implements ShouldQueue
 
         /*  Results
             "result": [
-        [
-            {
-                "datetime": "2017-11-05 03:10:00",
-                "height": 2.4,
-                "high_low": "high",
-                "timezone": "PST",
-                "unit": "m"
-            },
-            {
-                "datetime": "2017-11-05 07:33:00",
-                "height": 2.0,
-                "high_low": "low",
-                "timezone": "PST",
-                "unit": "m"
-            },
-        ], [...]...
+                [
+                    {
+                        "date": "2017-11-05",
+                        "time": "03:10:00"
+                        "height": 2.4,
+                        "high_low": "high",
+                        "timezone": "PST",
+                        "unit": "m"
+                    }, ...
+                ], [...]...
+            ]
          */
         $tidesOnDays = $response['result'];
-
         collect($tidesOnDays)->each(function ($tidesOnDay) {
-            collect($tidesOnDay)->each(function ($tide) {
-                $newTide = DataTide::create([
-                    'location_data_source_id' => $this->locationDataSource->id,
-                    'time' => $tide['datetime'],
-                    'timezone' => $tide['timezone'],
-                    'height' => $tide['height'],
-                    'high_low' => $tide['high_low'],
-                ]);
-                Log::info('Added tide data for ' . $tide['datetime']);
+            DB::transaction(function () use ($tidesOnDay) {
+                $locationDataSourceId = $this->locationDataSource->id;
+                // Remove old records for the day
+                DataTide::where([
+                    ['location_data_source_id', $locationDataSourceId],
+                    ['date', $tidesOnDay[0]['date']],
+                ])->delete();
+                collect($tidesOnDay)->each(function ($tide) {
+                    $newTide = DataTide::create([
+                        'location_data_source_id' => $this->locationDataSource->id,
+                        'date' => $tide['date'],
+                        'time' => $tide['time'],
+                        'timezone' => $tide['timezone'],
+                        'height' => $tide['height'],
+                        'high_low' => $tide['high_low'],
+                    ]);
+                    Log::info('Added tide data for ' . $tide['date']);
+                });
             });
         });
     }

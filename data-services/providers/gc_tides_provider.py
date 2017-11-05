@@ -44,7 +44,8 @@ class GCTidesProvider:
         def map_table(_date, _tz):
             return lambda data: {
                 'timezone': _tz,
-                'datetime': '{} {}:00'.format(_date, data.find(class_='time').text),
+                'date': _date,
+                'time': data.find(class_='time').text,
                 'height': float(data.find(class_='heightMeters').text),
                 'unit': 'm',
             }
