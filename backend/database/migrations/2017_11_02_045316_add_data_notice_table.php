@@ -13,7 +13,17 @@ class AddDataNoticeTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('data_notices', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('location_data_source_id');
+            $table->text('notice');
+            $table->timestamp('expires');
+            $table->timestamps();
+
+            $table->foreign('location_data_source_id')
+                ->references('id')
+                ->on('location_data_sources');
+        });
     }
 
     /**
@@ -23,6 +33,6 @@ class AddDataNoticeTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('data_notices');
     }
 }

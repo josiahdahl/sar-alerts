@@ -27,12 +27,12 @@ class CreateLayoutWidgetsTable extends Migration
             $table->timestamps();
 
             $table->foreign('station_id')
-                ->references('stations')
-                ->on('id');
+                ->references('id')
+                ->on('stations');
 
             $table->foreign('widget_id')
-                ->references('widgets')
-                ->on('id');
+                ->references('id')
+                ->on('widgets');
         });
     }
 

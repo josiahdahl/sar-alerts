@@ -70,18 +70,18 @@ class AppSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
-        $layoutTimeId = DB::table('layout_widget')->insertGetId([
-            'station_id' => $stationId,
-            'widget_id' => $widgetTimeId,
-            'row' => 1,
-            'cols_default' => 0,
-            'cols_xs' => 6,
-            'cols_sm' => 8,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+//        $layoutTimeId = DB::table('layout_widget')->insertGetId([
+//            'station_id' => $stationId,
+//            'widget_id' => $widgetTimeId,
+//            'row' => 1,
+//            'cols_default' => 0,
+//            'cols_xs' => 6,
+//            'cols_sm' => 8,
+//            'created_at' => Carbon::now(),
+//            'updated_at' => Carbon::now(),
+//        ]);
 
-        $layoutTidesId = DB::table('layout_widget')->insertGetId([
+        $layoutTidesId = DB::table('layout_widgets')->insertGetId([
             'station_id' => $stationId,
             'widget_id' => $widgetTidesId,
             'row' => 2,
@@ -90,7 +90,7 @@ class AppSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
-        $layoutWindId = DB::table('layout_widget')->insertGetId([
+        $layoutWindId = DB::table('layout_widgets')->insertGetId([
             'station_id' => $stationId,
             'widget_id' => $widgetWindId,
             'row' => 3,
@@ -99,7 +99,7 @@ class AppSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
-        $layoutNoticesId = DB::table('layout_widget')->insertGetId([
+        $layoutNoticesId = DB::table('layout_widgets')->insertGetId([
             'station_id' => $stationId,
             'widget_id' => $widgetNoticeId,
             'row' => 4,
@@ -112,6 +112,7 @@ class AppSeeder extends Seeder
         // TODO: Get the additional data sources for the other locations
         $weatherDataSource = LocationDataSource::where('provides', 'weather')->first();
         $tideDataSource = LocationDataSource::where('provides', 'tides')->first();
+        $notificationDataSource = LocationDataSource::where('provides', 'notices')->first();
 
         // Weather
         // TODO: Update with additional cities from DataSource Seeder
@@ -124,12 +125,12 @@ class AppSeeder extends Seeder
 
         // Time
         // TODO: Create a provider for time data
-        DB::table('widget_data_sources')->insertGetId([
-            'layout_widget_id' => $layoutTimeId,
-            'location_data_source_id' => $weatherDataSource->id,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+//        DB::table('widget_data_sources')->insertGetId([
+//            'layout_widget_id' => $layoutTimeId,
+//            'location_data_source_id' => $weatherDataSource->id,
+//            'created_at' => Carbon::now(),
+//            'updated_at' => Carbon::now(),
+//        ]);
 
         // Wind
         DB::table('widget_data_sources')->insertGetId([
@@ -142,15 +143,15 @@ class AppSeeder extends Seeder
         // Tides
         DB::table('widget_data_sources')->insertGetId([
             'layout_widget_id' => $layoutTidesId,
-            'location_data_source_id' => $weatherDataSource->id,
+            'location_data_source_id' => $tideDataSource->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
         // Notices
         DB::table('widget_data_sources')->insertGetId([
-            'layout_widget_id' => $layoutWeatherId,
-            'location_data_source_id' => $weatherDataSource->id,
+            'layout_widget_id' => $layoutNoticesId,
+            'location_data_source_id' => $notificationDataSource->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

@@ -83,13 +83,11 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
      * ```
      * @param LocationDataSource $locationDataSource
      * @return array the response body
-     * @todo Return properly formatted responses
      */
     public function get(LocationDataSource $locationDataSource)
     {
         $cityId = $locationDataSource->location_identifier['cityId'];
         $cacheKey = "owm_{$cityId}";
-        // TODO: Return correct formatting
         if (Cache::has($cacheKey)) {
             Log::info("Got weather for LocationDataSource {$locationDataSource->id} from cache");
             return $this->successResponse(Cache::get($cacheKey), $locationDataSource->id);

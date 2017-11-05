@@ -14,12 +14,12 @@ class WeatherController extends Controller
      * @param Request $request
      * @param WeatherIntegrationContract $integration
      * @param $id   integer     The LocationDataSource ID
+     * @todo Should the ID reference the location and then get the LocationDataSource using the provides column?
      * @return \Illuminate\Http\JsonResponse
      */
     public function get(Request $request, WeatherIntegrationContract $integration, $id)
     {
-        $locationDataSource = LocationDataSource::with('location')
-            ->where('id', $id)
+        $locationDataSource = LocationDataSource::where('id', $id)
             ->first();
 
         if (!$locationDataSource) {

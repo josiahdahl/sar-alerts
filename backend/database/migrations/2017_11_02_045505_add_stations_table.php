@@ -16,7 +16,7 @@ class AddStationsTable extends Migration
         Schema::create('stations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description')->default('');
+            $table->text('description')->nullable();
             $table->string('timezone'); // Valid PHP timezone string, i.e. 'Americas/Vancouver'
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,5 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DataNotice extends Model
 {
-    //
+    protected $guarded = ['id'];
+
+    public function scopeNotExpired($query)
+    {
+        return $query->where('expires', '>=', Carbon::now());
+    }
 }
