@@ -13,7 +13,13 @@ class AddStationsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('stations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('timezone'); // Valid PHP timezone string, i.e. 'Americas/Vancouver'
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +29,6 @@ class AddStationsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('stations');
     }
 }

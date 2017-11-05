@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AppLayoutsTable extends Migration
+class CreateWidgetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,12 @@ class AppLayoutsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('widgets', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('component_name');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ class AppLayoutsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('widgets');
     }
 }
