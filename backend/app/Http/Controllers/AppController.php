@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Integrations\OpenWeatherMapIntegration;
+use App\Jobs\GetTides;
+use App\LocationDataSource;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
+    /**
+     * @param $deg
+     * @return string
+     * @todo Move this into the DataWind Model
+     */
     private function windFromDeg($deg)
     {
         if ($deg < 22.5) {
@@ -132,5 +139,13 @@ class AppController extends Controller
 
 
         return view('app', ['data' => json_encode($pageData)]);
+    }
+
+    public function triggerTidesData()
+    {
+        $tideSources = LocationDataSource::where('provides', 'tides')->get();
+        $tideSources->each(function ($tideSource) {
+            GetTides::dispatch($tideSource);
+        });
     }
 }

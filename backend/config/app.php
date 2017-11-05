@@ -177,6 +177,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /* My Providers */
+        App\Providers\TideProvider::class,
+        App\Providers\WeatherAndWindServiceProvider::class,
+
     ],
 
     /*

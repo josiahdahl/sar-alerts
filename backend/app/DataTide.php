@@ -11,5 +11,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DataTide extends Model
 {
-    //
+    protected $fillable = [
+        'location_data_source_id',
+        'time',
+        'timezone',
+        'height',
+        'high_low',
+    ];
 }

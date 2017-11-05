@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Jobs\GetWeatherAndWind;
 use Illuminate\Support\ServiceProvider;
-use Integrations\OpenWeatherMapIntegration;
-use Integrations\Integration;
+use App\Integrations\OpenWeatherMapIntegration;
+use App\Integrations\Integration;
 
 class WeatherAndWindServiceProvider extends ServiceProvider
 {

@@ -17,6 +17,7 @@ class CreateLocationDataSourcesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('data_source_id');
             $table->unsignedInteger('location_id');
+            $table->string('provides');
             $table->text('location_identifier');
             $table->timestamps();
 
