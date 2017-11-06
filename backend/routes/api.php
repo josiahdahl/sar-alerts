@@ -21,4 +21,5 @@ Route::prefix('v1')->group(function () {
     Route::get('weather/{id}', 'Api\WeatherController@get');
     Route::get('tides/{id}', 'Api\TidesController@get');
     Route::get('notices/{id}', 'Api\NoticesController@get');
+    Route::get('time/{id}', 'Api\TimeController@get');
 });

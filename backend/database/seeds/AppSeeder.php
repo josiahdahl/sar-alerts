@@ -1,5 +1,6 @@
 <?php
 
+use App\Location;
 use App\LocationDataSource;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -17,7 +18,7 @@ class AppSeeder extends Seeder
         // The default station
         $stationId = DB::table('stations')->insertGetId([
             'name' => 'RCM-SAR Station 37 Sooke',
-            'timezone' => 'Americas/Vancouver',
+            'location_id' => Location::where('name', 'Sooke')->first()->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -155,9 +156,6 @@ class AppSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
-
-
-
 
 
     }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Integrations\LocationTimeIntegration;
 use Illuminate\Support\ServiceProvider;
 
 class TimeServiceProvider extends ServiceProvider
@@ -23,6 +24,8 @@ class TimeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('App\Contracts\Integrations\TimeIntegrationContract', function () {
+            return new LocationTimeIntegration();
+        });
     }
 }
