@@ -26,4 +26,9 @@ class LocationDataSource extends Model
     {
         return $this->belongsTo('App\DataSource');
     }
+
+    public function scopeProvides($query, $dataType)
+    {
+        return $query->where('provides', $dataType);
+    }
 }
