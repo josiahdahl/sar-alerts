@@ -4,46 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Integrations\OpenWeatherMapIntegration;
 use App\Jobs\GetTides;
+use App\LayoutWidget;
 use App\LocationDataSource;
+use App\Station;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
-    /**
-     * @param $deg
-     * @return string
-     * @todo Move this into the DataWind Model
-     */
-    private function windFromDeg($deg)
+
+    public function index(Request $request)
     {
-        if ($deg < 22.5) {
-            return 'N';
-        }
-        if ($deg < 67.5) {
-            return 'NE';
-        }
-        if ($deg < 112.5) {
-            return 'E';
-        }
-        if ($deg < 157.5) {
-            return 'SE';
-        }
-        if ($deg < 202.5) {
-            return 'S';
-        }
-        if ($deg < 247.5) {
-            return 'SW';
-        }
-        if ($deg < 292.5) {
-            return 'W';
-        }
-        if ($deg < 337.5) {
-            return 'NW';
-        }
-        return 'N';
+        // TODO: Don't hardcode this
+        $stationId = 1;
+
+        // TODO: Cache this
+        $layout = LayoutWidget::with(['widget', 'widgetDataSource.locationDataSource'])
+            ->where('station_id', $stationId)
+            ->orderBy('row')
+            ->get();
+
+        $pageData = $layout->reduce(function ($rows, $col) {
+            $row = $col->row - 1;
+            $widget = $col->widget->component_name;
+            $sizes = $col->sizes;
+            $dataUris = $col->widgetDataSource->map(function ($dataSource) {
+                return $dataSource->locationDataSource->endpoint;
+            });
+
+            $colData = [
+                'widget' => $widget,
+                'sizes' => $sizes,
+                'dataUris' => $dataUris,
+            ];
+
+            if (!isset($rows[$row])) {
+                $rows[$row] = [];
+            }
+            array_push($rows[$row], $colData);
+            return $rows;
+        }, []);
+
+        return view('app', ['data' => json_encode($pageData)]);
+
     }
 
-    public function index(Request $request, OpenWeatherMapIntegration $owm)
+    public function indexOld(Request $request, OpenWeatherMapIntegration $owm)
     {
         $weatherData = $owm->get(['6151264']);
 
@@ -54,22 +59,27 @@ class AppController extends Controller
         $windSpeed = number_format(3.6 * $weatherData['wind']['speed'], 1); // m/s to km/h
         $windDirection = $this->windFromDeg($weatherData['wind']['deg']);
 
+        /*
+         * Layout is an array of arrays (rows).
+         * The rows contain an array of objects which are the columns. The columns include widgets
+         */
         $pageData = ['layout' =>
             [
-                [[
-                    'widget' => 'WidgetWeather',
-                    'sizes' => [
-                        'sm' => 4,
-                    ],
-                    'widgetClass' => '',
-                    'content' => [
-                        'items' => [[
-                            'icon' => '/images/icons/heavy_rain_showers.svg',
-                            'temperature' => $weatherTemperature,
-                            'shortDescription' => $weatherDescription,
-                        ]],
-                    ]
-                ], [
+                [
+                    [
+                        'widget' => 'WidgetWeather',
+                        'sizes' => [
+                            'sm' => 4,
+                        ],
+                        'widgetClass' => '',
+                        'content' => [
+                            'items' => [[
+                                'icon' => '/images/icons/heavy_rain_showers.svg',
+                                'temperature' => $weatherTemperature,
+                                'shortDescription' => $weatherDescription,
+                            ]],
+                        ]
+                    ], [
                     'widget' => 'WidgetTime',
                     'sizes' => [
                         'sm' => 8,
@@ -78,7 +88,8 @@ class AppController extends Controller
                     'content' => [
                         'items' => []
                     ]
-                ]], [
+                ]
+                ], [
                 [
                     'widget' => 'Widget',
                     'sizes' => [

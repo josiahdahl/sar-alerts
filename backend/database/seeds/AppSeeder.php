@@ -45,6 +45,13 @@ class AppSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
+        $widgetWindId = DB::table('widgets')->insertGetId([
+            'name' => 'Current Wind',
+            'component_name' => 'WidgetWind',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
         $widgetTidesId = DB::table('widgets')->insertGetId([
             'name' => 'Tides',
             'component_name' => 'WidgetTides',
@@ -68,6 +75,7 @@ class AppSeeder extends Seeder
             'station_id' => $stationId,
             'widget_id' => $widgetTimeId,
             'row' => 1,
+            'col_xs' => 0,
             'col_sm' => 6,
             'col_md' => 8,
             'created_at' => Carbon::now(),
@@ -78,6 +86,14 @@ class AppSeeder extends Seeder
             'station_id' => $stationId,
             'widget_id' => $widgetTidesId,
             'row' => 2,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $layoutWindId = DB::table('layout_widgets')->insertGetId([
+            'station_id' => $stationId,
+            'widget_id' => $widgetWindId,
+            'row' => 3,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -115,6 +131,13 @@ class AppSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
+        DB::table('widget_data_sources')->insertGetId([
+            'layout_widget_id' => $layoutWindId,
+            'location_data_source_id' => $sookeWeatherDataSource->id,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
         // Time
         DB::table('widget_data_sources')->insertGetId([
             'layout_widget_id' => $layoutTimeId,
@@ -141,7 +164,7 @@ class AppSeeder extends Seeder
 
         /// PORT RENFREW
         DB::table('widget_data_sources')->insertGetId([
-            'layout_widget_id' => $layoutWeatherId,
+            'layout_widget_id' => $layoutWindId,
             'location_data_source_id' => $portRenfrewWeatherDataSource->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

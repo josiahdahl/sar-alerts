@@ -22,13 +22,28 @@ class LocationDataSource extends Model
         return $this->belongsTo('App\Location');
     }
 
-    public function data_source()
+    public function dataSource()
     {
         return $this->belongsTo('App\DataSource');
     }
 
+    /**
+     * @todo Should this be moved to the DataSource?
+     * @param $query
+     * @param $dataType
+     * @return mixed
+     */
     public function scopeProvides($query, $dataType)
     {
         return $query->where('provides', $dataType);
+    }
+
+    /**
+     * @todo Should the provides attribute be moved to the Data Source? Probably...
+     * @return string
+     */
+    public function getEndpointAttribute()
+    {
+        return "/api/v1/locations/{$this->location_id}/{$this->provides}";
     }
 }
