@@ -48,7 +48,7 @@ class AppController extends Controller
             return $rows;
         }, []);
 
-        return view('app', ['data' => json_encode($pageData)]);
+        return view('app', ['data' => json_encode(['layout' => $layout])]);
 
     }
 

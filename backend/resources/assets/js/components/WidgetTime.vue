@@ -10,42 +10,46 @@
 </template>
 
 <script>
+  import {format, addSeconds} from 'date-fns';
+  import {state} from '../store';
+  import * as api from '../api';
   import Widget from './Widget.vue';
-
-  const leftPad = (string, length, char = ' ') => {
-    const longString = char.repeat(length) + string;
-    return longString.substring((longString.length - length));
-  };
 
   export default {
     extends: Widget,
     data() {
       return {
-        dateObj: null,
+        state,
         interval: null,
+        endpoint: null,
+        dateTime: null,
       };
     },
     computed: {
+      locationId() {
+        return this.dataSources[0].locationId || false;
+      },
       currentDate() {
-        const [day, month, date, year] = this.dateObj.toDateString().split(' ');
-        return `${month} ${date}, ${year}`;
+        return format(this.dateTime, 'MMM DD, YYYY');
       },
       currentTime() {
-        return `${leftPad(this.dateObj.getHours(), 2, '0')}:${leftPad(this.dateObj.getMinutes(), 2, '0')}:${leftPad(this.dateObj.getSeconds(), 2, '0')}`;
+        return format(this.dateTime, 'HH:mm:ss');
       },
     },
     methods: {
-      setNewDateObj() {
-        this.dateObj = new Date();
-      }
-    },
-    created() {
-      this.setNewDateObj();
+      updateSeconds() {
+        this.dateTime = addSeconds(this.dateTime, 1);
+      },
     },
     mounted() {
-      this.interval = setInterval(() => {
-        this.setNewDateObj();
-      }, 1000);
+      this.dateTime = new Date();
+      this.endpoint = this.dataSources[0].endpoint;
+      api.get(this.endpoint)
+          .then(() => {
+            this.dateTime = this.state.appData.time[this.locationId].time;
+          });
+
+      this.interval = setInterval(this.updateSeconds, 1000);
     },
     beforeDestroy() {
       this.clearInterval(this.interval);

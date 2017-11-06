@@ -18,8 +18,7 @@
                        :key="idx"
                        :is="widget.widget"
                        :sizes="widget.sizes"
-                       :widget-class="widget.widgetClass"
-                       :content="widget.content">
+                       :data-sources="widget.dataSources">
             </component>
         </div>
     </div>

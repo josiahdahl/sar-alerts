@@ -19,18 +19,18 @@
     data() {
       return {};
     },
-    props: ['sizes', 'widgetClass', 'content'],
+    props: ['sizes', 'widgetClass', 'dataSources'],
     computed: {
+      // TODO: Turn this into a mixin
       cols() {
         return Object.keys(this.sizes).reduce((cols, size) => {
           const sizeModifier = this.sizes[size];
-          if (size === '') {
-            cols.push(`col-${sizeModifier}`);
-          } else {
-            cols.push(`col-${size}-${sizeModifier}`);
-          }
+
+          if (sizeModifier === null) return cols;
+
+          cols.push(`col-${size}-${sizeModifier}`);
           return cols;
-        }, []);
+        }, ['col']);
       },
     },
   };
