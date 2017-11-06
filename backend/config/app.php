@@ -180,6 +180,8 @@ return [
         /* My Providers */
         App\Providers\TideProvider::class,
         App\Providers\WeatherServiceProvider::class,
+        App\Providers\NoticeServiceProvider::class,
+        App\Providers\TimeServiceProvider::class,
 
     ],
 

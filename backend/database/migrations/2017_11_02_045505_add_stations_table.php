@@ -13,7 +13,17 @@ class AddStationsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('stations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('location_id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
+
+            $table->foreign('location_id')
+                ->references('id')
+                ->on('locations');
+        });
     }
 
     /**
@@ -23,6 +33,6 @@ class AddStationsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('stations');
     }
 }

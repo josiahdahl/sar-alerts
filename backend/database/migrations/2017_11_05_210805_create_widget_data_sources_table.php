@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDataNoticeTable extends Migration
+class CreateWidgetDataSourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class AddDataNoticeTable extends Migration
      */
     public function up()
     {
-        Schema::create('data_notices', function (Blueprint $table) {
+        Schema::create('widget_data_sources', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('layout_widget_id');
             $table->unsignedInteger('location_data_source_id');
-            $table->text('notice');
-            $table->timestamp('expires');
             $table->timestamps();
+
+            $table->foreign('layout_widget_id')
+                ->references('id')
+                ->on('layout_widgets');
 
             $table->foreign('location_data_source_id')
                 ->references('id')
@@ -33,6 +36,6 @@ class AddDataNoticeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('data_notices');
+        Schema::dropIfExists('widget_data_sources');
     }
 }

@@ -17,6 +17,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(function () {
-    Route::get('weather/{id}', 'Api\WeatherController@get');
+Route::namespace('Api')->group(function () {
+    Route::prefix('v1')->group(function () {
+        // TODO: Make all of these inherit a base ApiController and standarize responses
+
+        Route::get('weather/{id}', 'WeatherController@get');
+        Route::get('tides/{id}', 'TidesController@get');
+        Route::get('notices/{id}', 'NoticesController@get');
+        Route::get('time/{id}', 'TimeController@get');
+
+        Route::prefix('locations')->group(function () {
+            Route::get('{id}/weather', 'WeatherController@get');
+            Route::get('{id}/tides', 'TidesController@get');
+            Route::get('{id}/notices', 'NoticesController@get');
+            Route::get('{id}/time', 'TimeController@get');
+        });
+    });
 });
+

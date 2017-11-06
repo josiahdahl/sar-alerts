@@ -21,7 +21,7 @@ class AddLocationsTable extends Migration
             $table->string('country');
             $table->float('latitude');
             $table->float('longitude');
-            $table->string('timezone');
+            $table->string('timezone'); // Valid PHP timezone string, i.e. 'Americas/Vancouver'
             $table->timestamps();
         });
     }
