@@ -15,10 +15,14 @@ class AddStationsTable extends Migration
     {
         Schema::create('stations', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('location_id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('timezone'); // Valid PHP timezone string, i.e. 'Americas/Vancouver'
             $table->timestamps();
+
+            $table->foreign('location_id')
+                ->references('id')
+                ->on('locations');
         });
     }
 

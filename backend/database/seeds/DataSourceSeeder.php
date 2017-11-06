@@ -30,8 +30,14 @@ class DataSourceSeeder extends Seeder
             'url' => 'n/a',
         ]);
 
+        $timeProviderId = DB::table('data_sources')->insertGetId([
+            'name' => 'Local Time',
+            'description' => 'Returns the local time at a location',
+            'url' => 'n/a',
+        ]);
+
         // TODO: Add Beechy Head, Jordan River, and Port Renfrew locations/weather
-        $location_id = DB::table('locations')->insertGetId([
+        $locationId = DB::table('locations')->insertGetId([
             'name' => 'Sooke',
             'description' => 'A great city',
             'province' => 'BC',
@@ -43,7 +49,7 @@ class DataSourceSeeder extends Seeder
 
         DB::table('location_data_sources')->insert([
             'data_source_id' => $owm_id,
-            'location_id' => $location_id,
+            'location_id' => $locationId,
             'location_identifier' => json_encode(['cityId' => 6151264]),
             'provides' => 'weather',
             'endpoint' => '/api/v1/weather'
@@ -51,7 +57,7 @@ class DataSourceSeeder extends Seeder
 
         DB::table('location_data_sources')->insert([
             'data_source_id' => $gctides_id,
-            'location_id' => $location_id,
+            'location_id' => $locationId,
             'location_identifier' => json_encode(['locationId' => 7020]),
             'provides' => 'tides',
             'endpoint' => '/api/v1/tides'
@@ -59,9 +65,17 @@ class DataSourceSeeder extends Seeder
 
         DB::table('location_data_sources')->insert([
             'data_source_id' => $appNotificationsId,
-            'location_id' => $location_id,
+            'location_id' => $locationId,
             'location_identifier' => json_encode([]),
             'provides' => 'notices',
+            'endpoint' => '/api/v1/notices',
+        ]);
+
+        DB::table('location_data_sources')->insert([
+            'data_source_id' => $timeProviderId,
+            'location_id' => $locationId,
+            'location_identifier' => json_encode([]),
+            'provides' => 'time',
             'endpoint' => '/api/v1/notices',
         ]);
     }
