@@ -18,12 +18,11 @@ class CreateLayoutWidgetsTable extends Migration
             $table->unsignedInteger('station_id');
             $table->unsignedInteger('widget_id');
             $table->unsignedInteger('row');
-            $table->unsignedInteger('cols_default')->default(0);
-            $table->unsignedInteger('cols_xs')->nullable();
-            $table->unsignedInteger('cols_sm')->nullable();
-            $table->unsignedInteger('cols_md')->nullable();
-            $table->unsignedInteger('cols_lg')->nullable();
-            $table->unsignedInteger('cols_xl')->nullable();
+            $table->unsignedInteger('col_xs')->nullable();
+            $table->unsignedInteger('col_sm')->nullable();
+            $table->unsignedInteger('col_md')->nullable();
+            $table->unsignedInteger('col_lg')->nullable();
+            $table->unsignedInteger('col_xl')->nullable();
             $table->timestamps();
 
             $table->foreign('station_id')

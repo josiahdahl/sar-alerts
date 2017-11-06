@@ -58,9 +58,8 @@ class AppSeeder extends Seeder
             'station_id' => $stationId,
             'widget_id' => $widgetWeatherId,
             'row' => 1,
-            'cols_default' => 12,
-            'cols_xs' => 6,
-            'cols_sm' => 4,
+            'col_sm' => 6,
+            'col_md' => 4,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -69,9 +68,8 @@ class AppSeeder extends Seeder
             'station_id' => $stationId,
             'widget_id' => $widgetTimeId,
             'row' => 1,
-            'cols_default' => 0,
-            'cols_xs' => 6,
-            'cols_sm' => 8,
+            'col_sm' => 6,
+            'col_md' => 8,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -80,7 +78,6 @@ class AppSeeder extends Seeder
             'station_id' => $stationId,
             'widget_id' => $widgetTidesId,
             'row' => 2,
-            'cols_default' => 12,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -90,7 +87,6 @@ class AppSeeder extends Seeder
             'station_id' => $stationId,
             'widget_id' => $widgetNoticeId,
             'row' => 4,
-            'cols_default' => 12,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
