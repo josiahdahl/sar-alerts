@@ -43,7 +43,7 @@
     },
     methods: {
       getData() {
-        this.dataSources.forEach(source => api.get(source.endpoint).then(() => this.$nextTick()));
+        this.dataSources.forEach(source => api.get(source.endpoint));
       }
     },
     filters: {

@@ -4,6 +4,8 @@ import WidgetWeather from './components/WidgetWeather.vue';
 import WidgetTime from './components/WidgetTime.vue';
 import WidgetWind from './components/WidgetWind.vue';
 import WidgetNotice from './components/WidgetNotice.vue';
+import WidgetTides from './components/WidgetTides.vue';
+
 
 new Vue({
   el: '#app',
@@ -16,5 +18,6 @@ new Vue({
     WidgetTime,
     WidgetWind,
     WidgetNotice,
+    WidgetTides,
   }
 });

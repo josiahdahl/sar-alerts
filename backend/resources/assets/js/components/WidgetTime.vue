@@ -1,7 +1,7 @@
 <template>
     <div :class="cols">
-        <div class="widget flex-column justify-content-center w-time">
-            <section class="widget__body">
+        <div class="widget w-time justify-content-end">
+            <section class="widget__body flex-column justify-content-center">
                 <div class="w-time__time">{{currentTime}}</div>
                 <div class="w-time__date">{{currentDate}}</div>
             </section>

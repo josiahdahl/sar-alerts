@@ -37,27 +37,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '../../sass/variables';
 
-    .widget {
-        &__header {
-            border-bottom: 1px solid grayscale(200);
-            text-transform: uppercase;
-        }
-        &__body {
-            padding: map_get($spacers, 4);
-
-            display: flex;
-        }
-        &__status {
-            flex: 1;
-            &:last-child {
-                text-align: right;
-            }
-        }
-        &__status-label {
-        }
-        &__status-data {
-        }
-    }
 </style>

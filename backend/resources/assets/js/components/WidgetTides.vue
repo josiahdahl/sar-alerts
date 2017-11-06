@@ -1,13 +1,21 @@
 <template>
     <div :class="cols">
-        <div class="widget" :class="widgetClass">
-            <header class="widget__header display-4" v-if="content.title">
-                {{ content.title }}
+        <div class="widget">
+            <header class="widget__header display-4">
+                Tides
             </header>
             <section class="widget__body">
-                <div class="widget__status" v-for="item in content.items">
-                    <div class="widget__status-label h1">{{item.label}}</div>
-                    <div class="widget__status-data h2">{{item.data}}</div>
+                <div class="row flex-grow">
+                    <div class="col col-sm-4">
+                        <div class="h1">Flooding</div>
+                        <div class="display-3">3.2</div>
+                    </div>
+                    <div class="col col-sm-8 text-right w-tide__next" v-if="nextTide">
+                        <div class="h1">{{nextTide.high_low}} Tide</div>
+                        <div class="display-3">{{nextTide.time | removeSeconds }} {{nextTide.height}}
+                            <small>m</small>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -15,50 +23,59 @@
 </template>
 
 <script>
-  // TODO: Update this widget to be tide specific
+  import {isAfter, format} from 'date-fns';
+  import Widget from './Widget.vue';
+  import {state} from '../store';
+  import * as api from '../api';
+
   export default {
+    extends: Widget,
     data() {
-      return {};
+      return {
+        state,
+      };
     },
-    props: ['sizes', 'widgetClass', 'content'],
     computed: {
-      cols() {
-        return Object.keys(this.sizes).reduce((cols, size) => {
-          const sizeModifier = this.sizes[size];
-          if (size === '') {
-            cols.push(`col-${sizeModifier}`);
-          } else {
-            cols.push(`col-${size}-${sizeModifier}`);
-          }
-          return cols;
-        }, []);
+      currentTime() {
+        if (typeof this.state.appData.time[this.locationId] !== 'undefined') {
+          return this.state.appData.time[this.locationId].time;
+        }
+//        return new Date().toISOString();
       },
+      tides() {
+        return this.state.appData.tides[this.locationId] || [];
+      },
+      nextTide() {
+        return this.tides.find(tide => {
+          return isAfter(new Date(`${tide.date} ${tide.time} ${tide.timezone}`), new Date(this.currentTime));
+        });
+      },
+      locationId() {
+        return this.dataSources[0].locationId;
+      },
+    },
+    filters: {
+      removeSeconds(time) {
+        return time.split(':').slice(0, 2).join(':');
+      },
+    },
+    methods: {
+      getData() {
+        this.dataSources.forEach(source => api.get(source.endpoint));
+      },
+    },
+    mounted() {
+      this.getData();
     },
   };
 </script>
 
 <style lang="scss" scoped>
-    @import '../../sass/variables';
+    .widget__body {
+        display: block;
+    }
 
-    .widget {
-        &__header {
-            border-bottom: 1px solid grayscale(200);
-            text-transform: uppercase;
-        }
-        &__body {
-            padding: map_get($spacers, 4);
-
-            display: flex;
-        }
-        &__status {
-            flex: 1;
-            &:last-child {
-                text-align: right;
-            }
-        }
-        &__status-label {
-        }
-        &__status-data {
-        }
+    .w-tide__next {
+        text-transform: capitalize;
     }
 </style>

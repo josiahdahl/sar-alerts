@@ -19,6 +19,5 @@ export const mapData = (uri, data) => {
   const dataType = splitUri.pop();
   const locationId = splitUri.pop();
 
-  // state.appData[dataType][locationId] = Object.assign({}, data);
   Vue.set(state.appData[dataType], locationId, data);
 };
