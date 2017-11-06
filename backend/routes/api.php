@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::namespace('Api')->group(function () {
     Route::prefix('v1')->group(function () {
+        // TODO: Make all of these inherit a base ApiController and standarize responses
 
         Route::get('weather/{id}', 'WeatherController@get');
         Route::get('tides/{id}', 'TidesController@get');

@@ -18,7 +18,6 @@ class LocationTimeIntegration implements TimeIntegrationContract
 
     /**
      * Return a nicely formatted date time object in the appropriate time zone
-     * @TODO Update db seeders
      * @param LocationDataSource $locationDataSource
      * @return string
      */
