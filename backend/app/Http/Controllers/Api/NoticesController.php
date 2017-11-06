@@ -7,7 +7,7 @@ use App\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class NoticesController extends Controller
+class NoticesController extends ApiController
 {
     /**
      * Get the notices for a location
@@ -20,14 +20,10 @@ class NoticesController extends Controller
         $locationDataSource = Location::find($id)->dataSources()->provides('notices')->first();
 
         if (!$locationDataSource) {
-            return response()->json(['message' => 'Notifications for this location does not exist'], 404);
+            return $this->response(404, [], 'Notifications for this location does not exist');
         }
         $notifications = DataNotice::where('location_data_source_id', $locationDataSource->id)->get();
 
-        if (!$notifications) {
-            return response()->json(['message' => 'Tide data for this location does not exist'], 404);
-        }
-
-        return response()->json($notifications, 200);
+        return $this->response(200, $notifications);
     }
 }

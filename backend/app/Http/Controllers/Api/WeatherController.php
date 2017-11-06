@@ -8,7 +8,7 @@ use App\LocationDataSource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class WeatherController extends Controller
+class WeatherController extends ApiController
 {
     /**
      * Get the weather data for a location
@@ -23,11 +23,11 @@ class WeatherController extends Controller
         $locationDataSource = Location::find($id)->dataSources()->provides('weather')->first();
 
         if (!$locationDataSource) {
-            return response()->json(['message' => 'Data Source Does Not Exist'], 404);
+            return $this->response(404, [], 'Data Source Does Not Exist');
         }
 
         $data = $integration->get($locationDataSource);
 
-        return response()->json($data, 200);
+        return $this->response(200, $data);
     }
 }

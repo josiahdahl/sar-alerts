@@ -151,15 +151,11 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
     private function successResponse(Array $response, $id)
     {
         return [
-            'data' => [
-                'shortDescription' => $response['weather'][0]['main'],
-                'temperature' => $response['main']['temp'],
-                'windSpeed' => number_format(3.6 * $response['wind']['speed'], 1),
-                'windDirection' => $this->windFromDeg($response['wind']['deg']),
-                'city' => $response['name'],
-                'id' => $id,
-            ],
-            'status' => 200,
+            'shortDescription' => $response['weather'][0]['main'],
+            'temperature' => $response['main']['temp'],
+            'windSpeed' => number_format(3.6 * $response['wind']['speed'], 1),
+            'windDirection' => $this->windFromDeg($response['wind']['deg']),
+            'city' => $response['name'],
         ];
     }
 
@@ -170,7 +166,6 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
     private function errorResponse(Array $response)
     {
         return [
-            'data' => [],
             'status' => $response['cod'],
             'message' => $response['message']
         ];

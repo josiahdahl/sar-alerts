@@ -7,18 +7,19 @@ use App\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TimeController extends Controller
+class TimeController extends ApiController
 {
     public function get(Request $request, TimeIntegrationContract $time, $id)
     {
         $locationDataSource = Location::find($id)->dataSources()->provides('time')->first();
 
         if (!$locationDataSource) {
-            return response()->json(['message' => 'Local time for this location does not exist'], 404);
+            return $this->response(404, [], 'Local time for this location does not exist');
         }
 
         $localTime = $time->localTime($locationDataSource);
 
-        return response()->json(['time' => $localTime], 200);
+        return $this->response(200, ['time' => $localTime]);
+
     }
 }

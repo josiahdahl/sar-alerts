@@ -18,23 +18,27 @@ class AppController extends Controller
         $stationId = 1;
 
         // TODO: Cache this
-        $layout = LayoutWidget::with(['widget', 'widgetDataSource.locationDataSource'])
+        $layoutData = LayoutWidget::with(['widget', 'widgetDataSource.locationDataSource'])
             ->where('station_id', $stationId)
             ->orderBy('row')
             ->get();
 
-        $pageData = $layout->reduce(function ($rows, $col) {
+        $layout = $layoutData->reduce(function ($rows, $col) {
             $row = $col->row - 1;
             $widget = $col->widget->component_name;
             $sizes = $col->sizes;
-            $dataUris = $col->widgetDataSource->map(function ($dataSource) {
-                return $dataSource->locationDataSource->endpoint;
+            $dataSources = $col->widgetDataSource->map(function ($dataSource) {
+                return [
+                    'endpoint' => $dataSource->locationDataSource->endpoint,
+                    'locationId' => $dataSource->locationDataSource->location_id,
+                    'dataType' => $dataSource->locationDataSource->provides,
+                ];
             });
 
             $colData = [
                 'widget' => $widget,
                 'sizes' => $sizes,
-                'dataUris' => $dataUris,
+                'dataSources' => $dataSources,
             ];
 
             if (!isset($rows[$row])) {

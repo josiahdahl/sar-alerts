@@ -8,7 +8,7 @@ use App\LocationDataSource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TidesController extends Controller
+class TidesController extends ApiController
 {
     /**
      * Get the tide data for a location
@@ -21,14 +21,11 @@ class TidesController extends Controller
         $locationDataSource = Location::find($id)->dataSources()->provides('tides')->first();
 
         if (!$locationDataSource) {
-            return response()->json(['message' => 'Tide data for this location does not exist'], 404);
+            return $this->response(404, [], 'Tide data for this location does not exist');
         }
         $tideData = DataTide::where('location_data_source_id', $locationDataSource->id)->get();
 
-        if (!$tideData) {
-            return response()->json(['message' => 'Tide data for this location does not exist'], 404);
-        }
+        return $this->response(200, $tideData);
 
-        return response()->json($tideData, 200);
     }
 }
