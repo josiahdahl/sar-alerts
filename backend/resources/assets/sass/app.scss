@@ -4,8 +4,22 @@
 @import './variables';
 @import '../../../node_modules/bootstrap/scss/bootstrap';
 
+html {
+  @include media-breakpoint-up(lg) {
+    font-size: 1.6rem;
+  }
+}
+
+body {
+  background-image: url('/images/main-background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
 .widget {
   &__header {
+    font-size: 3rem;
     border-bottom: 1px solid grayscale(200);
     text-transform: uppercase;
   }
@@ -24,4 +38,8 @@
   }
   &__status-data {
   }
+}
+
+.app-row {
+  height: 25vh;
 }

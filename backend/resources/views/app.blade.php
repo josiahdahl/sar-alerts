@@ -13,7 +13,7 @@
 <body>
 <div id="app">
     <div class="container">
-        <div class="row mb-lg-4" v-for="row in layout">
+        <div class="row app-row" v-for="row in layout">
             <component v-for="(widget, idx) in row"
                        :key="idx"
                        :is="widget.widget"

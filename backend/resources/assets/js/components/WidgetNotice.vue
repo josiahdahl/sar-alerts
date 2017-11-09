@@ -1,7 +1,7 @@
 <template>
     <div :class="cols">
         <div class="widget">
-            <header class="widget__header display-4">
+            <header class="widget__header">
                 Alerts
             </header>
             <section class="widget__body">

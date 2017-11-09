@@ -1,14 +1,17 @@
 <template>
-    <div :class="cols">
-        <div class="widget">
+    <div :class="cols" class="d-flex flex-column justify-content-center">
+        <div class="widget w-weather">
             <section class="widget__body">
-                <div class="widget__status d-flex"
+                <div class="widget__status d-flex flex-column"
                      v-for="item in items">
-                    <img class="widget__status-icon" :src="defaultIcon">
-                    <div class="d-flex flex-column text-center justify-content-center">
-                        <div class="widget__status-label display-3">{{item.temperature | toFixed }}&deg;</div>
-                        <div class="widget__status-data h2">{{item.shortDescription}}</div>
+                    <div class="d-flex">
+                        <img class="widget__status-icon" :src="defaultIcon">
+                        <div class="d-flex flex-column text-center justify-content-center">
+                            <div class="widget__status-label display-3">{{item.temperature | toFixed(0) }}&deg;</div>
+                            <div class="widget__status-data h2">{{item.shortDescription}}</div>
+                        </div>
                     </div>
+                    <div class="text-center">Updated<br> {{ item.created.date | formatLastUpdated }}</div>
                 </div>
             </section>
         </div>
@@ -19,7 +22,9 @@
   import {format, addSeconds} from 'date-fns';
   import {state} from '../store';
   import * as api from '../api';
+  import {toFixed} from '../util/filters';
   import Widget from './Widget.vue';
+
 
   export default {
     extends: Widget,
@@ -47,9 +52,10 @@
       }
     },
     filters: {
-      toFixed(val) {
-        return val.toFixed(1);
-      }
+      toFixed,
+      formatLastUpdated(val) {
+        return format(val, 'MMM DD HH:mm')
+      },
     },
     mounted() {
       this.getData();
@@ -58,6 +64,7 @@
 </script>
 
 <style lang="scss" scoped>
+
     .widget__status-icon {
         height: auto;
         max-width: 150px;

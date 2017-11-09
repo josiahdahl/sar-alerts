@@ -10,7 +10,9 @@ export const state = {
     },
     tides: {},
     notices: {},
-    time: {},
+    time: {
+      currentTime: new Date(),
+    },
   },
 };
 
