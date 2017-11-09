@@ -1,19 +1,19 @@
 <template>
     <div :class="cols">
         <div class="widget">
-            <header class="widget__header display-4">
+            <header class="widget__header">
                 Tides
             </header>
             <section class="widget__body">
                 <div class="row flex-grow">
-                    <div class="col col-sm-4">
-                        <div class="h1">Flooding</div>
-                        <div class="display-3">3.2</div>
+                    <div class="col col-sm-4 col-md-6">
+                        <div class="h2">Current Status</div>
+                        <div class="h3">Flooding 3.2ft</div>
                     </div>
-                    <div class="col col-sm-8 text-right w-tide__next" v-if="nextTide">
-                        <div class="h1">{{nextTide.high_low}} Tide</div>
-                        <div class="display-3">{{nextTide.time | removeSeconds }} {{nextTide.height}}
-                            <small>m</small>
+                    <div class="col col-sm-8 col-md-6 text-right w-tide__next" v-if="nextTide">
+                        <div class="h2">{{nextTide.high_low}} Tide {{nextTide.time | removeSeconds }}</div>
+                        <div class="h1">Height: {{nextTide.height | mToFt | toFixed(1) }}
+                            <small>ft</small>
                         </div>
                     </div>
                 </div>
@@ -24,6 +24,7 @@
 
 <script>
   import {isAfter, format} from 'date-fns';
+  import {filters} from '../util';
   import Widget from './Widget.vue';
   import {state} from '../store';
   import * as api from '../api';
@@ -54,11 +55,7 @@
         return this.dataSources[0].locationId;
       },
     },
-    filters: {
-      removeSeconds(time) {
-        return time.split(':').slice(0, 2).join(':');
-      },
-    },
+    filters,
     methods: {
       getData() {
         this.dataSources.forEach(source => api.get(source.endpoint));

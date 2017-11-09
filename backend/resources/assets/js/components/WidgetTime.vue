@@ -30,7 +30,7 @@
         return this.dataSources[0].locationId || false;
       },
       currentDate() {
-        return format(this.dateTime, 'MMM DD, YYYY');
+        return format(this.dateTime, 'MMM DD');
       },
       currentTime() {
         return format(this.dateTime, 'HH:mm:ss');

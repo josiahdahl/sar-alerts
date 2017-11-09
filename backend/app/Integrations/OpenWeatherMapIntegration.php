@@ -87,10 +87,14 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
     public function get(LocationDataSource $locationDataSource)
     {
         $cityId = $locationDataSource->location_identifier['cityId'];
+        $timezone = $locationDataSource->location->timezone;
         $cacheKey = "owm_{$cityId}";
-        if (Cache::has($cacheKey)) {
+        $lastUpdatedKey = "{$cacheKey}_age";
+
+        // If we don't know when it was last updated, get it again.
+        if (Cache::has($cacheKey) && Cache::has($lastUpdatedKey)) {
             Log::info("Got weather for LocationDataSource {$locationDataSource->id} from cache");
-            return $this->successResponse(Cache::get($cacheKey), $locationDataSource->id);
+            return $this->successResponse(Cache::get($cacheKey), Cache::get($lastUpdatedKey));
         }
 
         $query = ['id' => $cityId, 'APPID' => $this->api_key, 'units' => self::$units];
@@ -102,7 +106,9 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
         if ($response->getStatusCode() === 200) {
             Log::info("Added weather for LocationDataSource {$locationDataSource->id} to cache");
             Cache::put($cacheKey, $responseData, Carbon::now()->addMinutes(30));
-            return $this->successResponse($responseData, $locationDataSource->id);
+            $lastUpdated = Carbon::now()->setTimezone($timezone);
+            Cache::put($lastUpdatedKey, $lastUpdated, Carbon::now()->addMinutes(30));
+            return $this->successResponse($responseData, $lastUpdated);
         } else {
             Log::error("Error getting OpenWeatherMap data for city {$cityId}. LocationDataSource {$locationDataSource->id}", $responseData);
             return $this->errorResponse($responseData);
@@ -145,10 +151,10 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
      *  'message' => 'Some message',
      * ]
      * @param array $response
-     * @param integer $id LocationDataSource id
+     * @param $created
      * @return array
      */
-    private function successResponse(Array $response, $id)
+    private function successResponse(Array $response, $created)
     {
         return [
             'shortDescription' => $response['weather'][0]['main'],
@@ -156,6 +162,7 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
             'windSpeed' => number_format(3.6 * $response['wind']['speed'], 1),
             'windDirection' => $this->windFromDeg($response['wind']['deg']),
             'city' => $response['name'],
+            'created' => $created,
         ];
     }
 
