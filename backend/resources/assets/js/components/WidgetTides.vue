@@ -103,8 +103,8 @@
           return tideStates.UNKNOWN;
         }
         const heightDiff = this.prevTide.height - this.nextTide.height;
-
-        if (Math.floor(Math.abs(heightDiff / this.prevTide) * 100) < slackTidePercent) {
+        const heightDiffPercent = Math.floor(Math.abs(heightDiff / this.prevTide.height) * 100);
+        if (heightDiffPercent < slackTidePercent) {
           return tideStates.SLACK;
         }
         if (heightDiff > 0) {
@@ -176,12 +176,12 @@
                 scales: {
                   xAxes: [{
                     ticks: {
-                      fontSize: 20,
+                      fontSize: 16,
                     }
                   }],
                   yAxes: [{
                     ticks: {
-                      fontSize: 20,
+                      fontSize: 16,
                     },
                   }],
                 },

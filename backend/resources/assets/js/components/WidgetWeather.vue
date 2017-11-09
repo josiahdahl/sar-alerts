@@ -11,7 +11,7 @@
                             <div class="widget__status-data h2">{{item.shortDescription}}</div>
                         </div>
                     </div>
-                    <div class="text-center">Updated<br> {{ item.created.date | formatLastUpdated }}</div>
+                    <div class="text-center">Updated {{ item.created.date | formatLastUpdated }}</div>
                 </div>
             </section>
         </div>
@@ -66,8 +66,7 @@
 <style lang="scss" scoped>
 
     .widget__status-icon {
-        height: auto;
-        max-width: 150px;
+        height: 150px;
         display: block;
         margin: 0 auto;
     }
