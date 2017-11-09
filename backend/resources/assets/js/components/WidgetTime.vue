@@ -22,7 +22,6 @@
         state,
         interval: null,
         endpoint: null,
-        dateTime: null,
       };
     },
     computed: {
@@ -35,6 +34,17 @@
       currentTime() {
         return format(this.dateTime, 'HH:mm:ss');
       },
+      dateTime: {
+        get() {
+          if (typeof this.state.appData.time[this.locationId] !== 'undefined') {
+            return this.state.appData.time[this.locationId].time;
+          }
+          return new Date();
+        },
+        set(val) {
+          this.$set(this.state.appData.time[this.locationId], 'time', val);
+        }
+      },
     },
     methods: {
       updateSeconds() {
@@ -42,12 +52,9 @@
       },
     },
     mounted() {
-      this.dateTime = new Date();
+//      this.dateTime = new Date();
       this.endpoint = this.dataSources[0].endpoint;
-      api.get(this.endpoint)
-          .then(() => {
-            this.dateTime = this.state.appData.time[this.locationId].time;
-          });
+      api.get(this.endpoint);
 
       this.interval = setInterval(this.updateSeconds, 1000);
     },

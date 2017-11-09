@@ -117,6 +117,9 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
 
     private function windFromDeg($deg)
     {
+        if (is_null($deg)) {
+            return '';
+        }
         if ($deg < 22.5) {
             return 'N';
         }
@@ -160,7 +163,7 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
             'shortDescription' => $response['weather'][0]['main'],
             'temperature' => $response['main']['temp'],
             'windSpeed' => number_format(3.6 * $response['wind']['speed'], 1),
-            'windDirection' => $this->windFromDeg($response['wind']['deg']),
+            'windDirection' => $this->windFromDeg(isset($response['wind']['deg']) ? $response['wind']['deg'] : null),
             'city' => $response['name'],
             'created' => $created,
         ];
