@@ -5,19 +5,21 @@
                 Tides
             </header>
             <section class="widget__body">
-                <div class="row flex-grow">
-                    <div class="col col-sm-4 col-md-6">
-                        <div class="h3">Current:</div>
-                        <div class="h4 text-capitalize">{{tideState}} {{tideEstimatedHeight | mToFt | toFixed(1)}} ft
-                        </div>
-                    </div>
-                    <div class="col col-sm-8 col-md-6 text-right w-tide__next" v-if="nextTide">
-                        <div class="h2">{{nextTide.high_low}} Tide {{nextTide.time | removeSeconds }}</div>
-                        <div class="h1">Height: {{nextTide.height | mToFt | toFixed(1) }}
+                <div class="row flex-grow justify-content-between">
+                    <div class="col col-auto">
+                        <div class="h1"><span class="text-capitalize">{{tideState}}</span>
+                            - {{tideEstimatedHeight | mToFt | toFixed(1)}}
                             <small>ft</small>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col col-auto text-right w-tide__next" v-if="nextTide">
+                        <div class="h1">
+                            <span class="text-capitalize">{{nextTide.high_low}}</span>
+                            Tide - {{nextTide.time | removeSeconds
+                            }} - {{nextTide.height | mToFt | toFixed(1) }}<small>ft</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
                         <div class="v-chart">
                             <canvas class="v-chart__chart"></canvas>
                         </div>
@@ -36,7 +38,6 @@
   import {state} from '../store';
   import * as api from '../api';
 
-  const slackTidePercent = 20;
   const tideStates = {
     SLACK: 'slack',
     FLOODING: 'flooding',
@@ -97,22 +98,26 @@
         });
       },
       tideState() {
-        const currentTideIndex = this.tides.findIndex(tide => tide === this.nextTide);
-        // Since we always get 36 hours of tides, this should never be < 0
         if (typeof this.prevTide === 'undefined' || typeof this.nextTide === 'undefined') {
           return tideStates.UNKNOWN;
         }
-        const heightDiff = this.prevTide.height - this.nextTide.height;
-        const heightDiffPercent = Math.floor(Math.abs(heightDiff / this.prevTide.height) * 100);
-        if (heightDiffPercent < slackTidePercent) {
+        const diffFromPrev = differenceInMinutes(new Date(`${this.prevTide.date} ${this.prevTide.time} ${this.prevTide.timezone}`), this.currentTime);
+        const diffFromNext = differenceInMinutes(this.currentTime, new Date(`${this.nextTide.date} ${this.nextTide.time} ${this.nextTide.timezone}`));
+        if ( Math.abs(diffFromPrev) < 60 || Math.abs(diffFromNext) < 60) {
           return tideStates.SLACK;
         }
+
+        const heightDiff = this.prevTide.height - this.nextTide.height;
+
         if (heightDiff > 0) {
           return tideStates.EBBING;
         }
         return tideStates.FLOODING;
       },
       tideEstimatedHeight() {
+        if (typeof this.prevTide === 'undefined' || typeof this.nextTide === 'undefined') {
+          return 0;
+        }
         const nextTideDateObj = parse(`${this.nextTide.date} ${this.nextTide.time} ${this.nextTide.timezone}`);
         const prevTideDateObj = parse(`${this.prevTide.date} ${this.prevTide.time} ${this.prevTide.timezone}`);
         const timeBeforeNextMinMax = Math.abs(differenceInMinutes(this.currentTime, nextTideDateObj));
@@ -195,9 +200,5 @@
 <style lang="scss" scoped>
     .widget__body {
         display: block;
-    }
-
-    .w-tide__next {
-        text-transform: capitalize;
     }
 </style>
