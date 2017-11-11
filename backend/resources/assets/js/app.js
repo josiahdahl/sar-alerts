@@ -5,7 +5,7 @@ import WidgetTime from './components/WidgetTime.vue';
 import WidgetWind from './components/WidgetWind.vue';
 import WidgetNotice from './components/WidgetNotice.vue';
 import WidgetTides from './components/WidgetTides.vue';
-
+import DataAge from './components/DataAge.vue';
 
 new Vue({
   el: '#app',
@@ -19,5 +19,6 @@ new Vue({
     WidgetWind,
     WidgetNotice,
     WidgetTides,
-  }
+    DataAge,
+  },
 });

@@ -21,6 +21,11 @@
                        :data-sources="widget.dataSources">
             </component>
         </div>
+        <div class="row">
+            <div class="col text-right">
+                <data-age></data-age>
+            </div>
+        </div>
     </div>
 </div>
 <script src="{{ mix('/js/manifest.js') }}"></script>

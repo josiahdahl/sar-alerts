@@ -9,11 +9,10 @@
                      v-for="item in items">
                     <div class="d-flex flex-column text-center justify-content-center mx-2">
                         <div class="widget__status-label h3"><strong>{{item.city}}</strong></div>
-                        <div class="widget__status-data h2">{{item.windSpeed | toFixed(0)}}
-                            <small>km/h</small>
+                        <div class="widget__status-data h2">{{item.windSpeed | toFixed(1)}}
+                            <small>knots</small>
                         </div>
                         <div class="widget__status-data h5">{{item.windDirection}}</div>
-                        <div class="text-center">Updated<br> {{ item.created.date | formatLastUpdated }}</div>
                     </div>
                 </div>
             </section>
@@ -48,7 +47,8 @@
     },
     methods: {
       getData() {
-        this.dataSources.forEach(source => api.get(source.endpoint));
+        this.dataSources.forEach(source => api.get(source.endpoint)
+            .then(() => api.schedule(source.endpoint)));
       }
     },
     filters: {
