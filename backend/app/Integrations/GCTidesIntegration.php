@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Log;
 
 class GCTidesIntegration implements DataServicesIntegrationContract
 {
-    // TODO: Move this into the .env/config
-    static $api_url = 'http://localhost:5000/api/v1';
     static $data_source_name = 'GCTides';
+    protected $api_url;
     protected $client;
     protected $redisKey;
 
@@ -26,6 +25,7 @@ class GCTidesIntegration implements DataServicesIntegrationContract
     {
         $this->client = $client;
         $this->redisKey = FALSE;
+        $this->api_url = config('services.dataservice.endpoint');
     }
 
     /**
@@ -38,7 +38,7 @@ class GCTidesIntegration implements DataServicesIntegrationContract
         $identifier = $locationDataSource->location_identifier;
         $locationId = $identifier['locationId'];
 
-        $request = $this->client->post(self::$api_url . '/tides/gov-canada', [
+        $request = $this->client->post($this->api_url . '/tides/gov-canada', [
             'form_params' => [
                 'location_id' => $locationId,
             ],
@@ -59,7 +59,7 @@ class GCTidesIntegration implements DataServicesIntegrationContract
      */
     public function retrieve()
     {
-        $request = $this->client->get(self::$api_url . '/jobs/' . $this->redisKey);
+        $request = $this->client->get($this->api_url . '/jobs/' . $this->redisKey);
         $response = json_decode($request->getBody(), true);
         // look for status's -> failed, pending, finished
         return $response;

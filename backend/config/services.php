@@ -37,5 +37,7 @@ return [
     'openweathermap' => [
         'key' => env('OWM_API_KEY'),
     ],
-
+    'dataservice' => [
+        'endpoint' => env('DATA_SERVICE_ENDPOINT'),
+    ],
 ];
