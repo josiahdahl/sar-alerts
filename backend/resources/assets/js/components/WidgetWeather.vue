@@ -11,7 +11,6 @@
                             <div class="widget__status-data h2">{{item.shortDescription}}</div>
                         </div>
                     </div>
-                    <div class="text-center">Updated {{ item.created.date | formatLastUpdated }}</div>
                 </div>
             </section>
         </div>
@@ -48,7 +47,8 @@
     },
     methods: {
       getData() {
-        this.dataSources.forEach(source => api.get(source.endpoint));
+        this.dataSources.forEach(source => api.get(source.endpoint)
+            .then(() => api.schedule(source.endpoint)));
       }
     },
     filters: {

@@ -22,6 +22,7 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
     private $api_key;
     static $api_url = 'http://api.openweathermap.org/data/2.5/weather';
     static $units = 'metric';
+    const M_TO_KNOTS = 1.94384;
 
     /**
      * OpenWeatherMapIntegration constructor.
@@ -162,7 +163,7 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
         return [
             'shortDescription' => $response['weather'][0]['main'],
             'temperature' => $response['main']['temp'],
-            'windSpeed' => number_format(3.6 * $response['wind']['speed'], 1),
+            'windSpeed' => number_format(self::M_TO_KNOTS * $response['wind']['speed'], 1),
             'windDirection' => $this->windFromDeg(isset($response['wind']['deg']) ? $response['wind']['deg'] : null),
             'city' => $response['name'],
             'created' => $created,

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import {format} from 'date-fns';
 
 export const state = {
   appData: {
@@ -14,6 +15,7 @@ export const state = {
       currentTime: new Date(),
     },
   },
+  lastUpdated: {}
 };
 
 export const mapData = (uri, data) => {
