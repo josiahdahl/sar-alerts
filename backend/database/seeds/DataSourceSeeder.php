@@ -57,7 +57,15 @@ class DataSourceSeeder extends Seeder
             'timezone' => 'America/Vancouver',
         ]);
 
-
+        $victoriaId = DB::table('locations')->insertGetId([
+            'name' => 'Victoria',
+            'description' => 'A great city',
+            'province' => 'BC',
+            'country' => 'Canada',
+            'latitude' => 48.43,
+            'longitude' => -123.37,
+            'timezone' => 'America/Vancouver',
+        ]);
 
         DB::table('location_data_sources')->insert([
             'data_source_id' => $owm_id,
@@ -71,6 +79,14 @@ class DataSourceSeeder extends Seeder
             'data_source_id' => $owm_id,
             'location_id' => $portRenfrewId,
             'location_identifier' => json_encode(['cityId' => 6111995]),
+            'provides' => 'weather',
+            'endpoint' => '/api/v1/weather'
+        ]);
+
+        DB::table('location_data_sources')->insert([
+            'data_source_id' => $owm_id,
+            'location_id' => $victoriaId,
+            'location_identifier' => json_encode(['cityId' => 6174041]),
             'provides' => 'weather',
             'endpoint' => '/api/v1/weather'
         ]);
