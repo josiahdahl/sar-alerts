@@ -121,6 +121,11 @@ class AppSeeder extends Seeder
             ['location_id', 2]
         ])->first();
 
+        $victoriaWeatherDataSource = Location::where([
+            ['provides', 'weather'],
+            ['location_id', 3]
+        ])->first();
+
         /// SOOKE
         // Weather
         // TODO: Update with additional cities from DataSource Seeder
@@ -166,6 +171,14 @@ class AppSeeder extends Seeder
         DB::table('widget_data_sources')->insertGetId([
             'layout_widget_id' => $layoutWindId,
             'location_data_source_id' => $portRenfrewWeatherDataSource->id,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        /// Victoria
+        DB::table('widget_data_sources')->insertGetId([
+        'layout_widget_id' => $layoutWindId,
+            'location_data_source_id' => $victoriaWeatherDataSource->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
