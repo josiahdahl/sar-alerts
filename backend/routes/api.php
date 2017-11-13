@@ -23,13 +23,13 @@ Route::namespace('Api')->group(function () {
 
         Route::get('weather/{id}', 'WeatherController@get');
         Route::get('tides/{id}', 'TidesController@get');
-        Route::get('notices/{id}', 'NoticesController@get');
+        Route::get('notices/{locationId}', 'NoticesController@get');
         Route::get('time/{id}', 'TimeController@get');
 
         Route::prefix('locations')->group(function () {
             Route::get('{id}/weather', 'WeatherController@get');
             Route::get('{id}/tides', 'TidesController@get');
-            Route::get('{id}/notices', 'NoticesController@get');
+            Route::get('{locationId}/notices', 'NoticesController@get');
             Route::get('{id}/time', 'TimeController@get');
         });
     });

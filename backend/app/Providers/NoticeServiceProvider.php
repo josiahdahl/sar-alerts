@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Integrations\DataNoticeIntegration;
+use App\Integrations\GCNoticeIntegration;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class NoticeServiceProvider extends ServiceProvider
@@ -24,8 +25,8 @@ class NoticeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Contracts\Integrations\NotificationIntegrationProvider', function ($app) {
-            return new DataNoticeIntegration();
+        $this->app->bind('App\Contracts\Integrations\NotificationIntegrationContract', function ($app) {
+            return new GCNoticeIntegration(new Client());
         });
     }
 }

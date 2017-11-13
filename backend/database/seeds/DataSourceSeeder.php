@@ -12,6 +12,7 @@ class DataSourceSeeder extends Seeder
      */
     public function run()
     {
+        // TODO: Add required fields to data source
         $owm_id = DB::table('data_sources')->insertGetId([
             'name' => 'OpenWeatherMap',
             'description' => 'Free weather API',
@@ -25,9 +26,9 @@ class DataSourceSeeder extends Seeder
         ]);
 
         $appNotificationsId = DB::table('data_sources')->insertGetId([
-            'name' => 'Notifications/Alerts',
-            'description' => 'Manually entered notifications and alerts',
-            'url' => 'n/a',
+            'name' => 'GCWeatherNotices',
+            'description' => 'Government of Canada Weather Alerts and Forecasts',
+            'url' => 'http://weather.gc.ca/marine/forecast_e.html',
         ]);
 
         $timeProviderId = DB::table('data_sources')->insertGetId([
@@ -36,7 +37,6 @@ class DataSourceSeeder extends Seeder
             'url' => 'n/a',
         ]);
 
-        // TODO: Add Beechy Head, Jordan River, and Port Renfrew locations/weather
         $sookeId = DB::table('locations')->insertGetId([
             'name' => 'Sooke',
             'description' => 'A great city',
@@ -64,6 +64,16 @@ class DataSourceSeeder extends Seeder
             'country' => 'Canada',
             'latitude' => 48.43,
             'longitude' => -123.37,
+            'timezone' => 'America/Vancouver',
+        ]);
+
+        $juanDeFucaCenterId = DB::table('locations')->insertGetId([
+            'name' => 'Juan de Fuca Strait - central strait',
+            'description' => '',
+            'province' => 'BC',
+            'country' => 'Canada',
+            'latitude' => 48.3,
+            'longitude' => -124.27,
             'timezone' => 'America/Vancouver',
         ]);
 
@@ -101,8 +111,11 @@ class DataSourceSeeder extends Seeder
 
         DB::table('location_data_sources')->insert([
             'data_source_id' => $appNotificationsId,
-            'location_id' => $sookeId,
-            'location_identifier' => json_encode([]),
+            'location_id' => $juanDeFucaCenterId,
+            'location_identifier' => json_encode([
+                'feedUrl' => 'https://weather.gc.ca/rss/marine/07000_e.xml',
+                'locationId' => '07010'
+            ]),
             'provides' => 'notices',
             'endpoint' => '/api/v1/notices',
         ]);
