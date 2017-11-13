@@ -121,7 +121,7 @@ class AppSeeder extends Seeder
             ['location_id', 2]
         ])->first();
 
-        $victoriaWeatherDataSource = Location::where([
+        $victoriaWeatherDataSource = LocationDataSource::where([
             ['provides', 'weather'],
             ['location_id', 3]
         ])->first();
@@ -177,7 +177,7 @@ class AppSeeder extends Seeder
 
         /// Victoria
         DB::table('widget_data_sources')->insertGetId([
-        'layout_widget_id' => $layoutWindId,
+            'layout_widget_id' => $layoutWindId,
             'location_data_source_id' => $victoriaWeatherDataSource->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
