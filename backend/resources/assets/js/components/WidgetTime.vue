@@ -54,7 +54,10 @@
     mounted() {
 //      this.dateTime = new Date();
       this.endpoint = this.dataSources[0].endpoint;
-      api.get(this.endpoint);
+      api.get(this.endpoint).then(() => {
+        api.schedule(this.endpoint);
+        api.startHeartbeat(this.endpoint);
+      });
 
       this.interval = setInterval(this.updateSeconds, 1000);
     },

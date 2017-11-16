@@ -15,8 +15,7 @@
                     <div class="col col-auto text-right w-tide__next" v-if="nextTide">
                         <div class="h1">
                             <span class="text-capitalize">{{nextTide.high_low}}</span>
-                            Tide - {{nextTide.time | removeSeconds
-                            }} - {{nextTide.height | mToFt | toFixed(1) }}<small>ft</small>
+                            Tide - {{nextTide.time | removeSeconds}} - {{nextTide.height | mToFt | toFixed(1) }}<small>ft</small>
                         </div>
                     </div>
                     <div class="col-sm-12 mt-3">
