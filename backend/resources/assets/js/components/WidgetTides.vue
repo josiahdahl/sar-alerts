@@ -151,7 +151,11 @@
     filters,
     methods: {
       getData() {
-        return this.dataSources.map(source => api.get(source.endpoint))
+        return this.dataSources.map((source) => api.get(source.endpoint)
+            .then(() => {
+                api.schedule(source.endpoint, api.MINUTE * 60 * 12);
+                api.startHeartbeat(source.endpoint, api.MINUTE);
+            }))
       },
     },
     mounted() {
