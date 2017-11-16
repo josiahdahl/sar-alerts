@@ -47,8 +47,13 @@
     },
     methods: {
       getData() {
-        this.dataSources.forEach(source => api.get(source.endpoint)
-            .then(() => api.schedule(source.endpoint)));
+        this.dataSources.forEach((source) => {
+          api.get(source.endpoint)
+              .then(() => {
+                api.schedule(source.endpoint);
+                api.startHeartbeat(source.endpoint);
+              });
+        });
       }
     },
     filters: {
