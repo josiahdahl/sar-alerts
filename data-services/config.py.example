@@ -1,4 +1,8 @@
+import os
+
 REDIS_HOST = 'localhost'
 REDIS_QUEUE = 'jobs'
 
 DATA_TIDES = {'url': 'http://tides.gc.ca/eng/station'}
+
+DEBUG = os.environ.get('SAR_ALERTS_DEBUG', False)
