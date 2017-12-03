@@ -4,14 +4,18 @@ namespace App\Jobs;
 
 use App\DataTide;
 use App\Contracts\Integrations\DataServicesIntegrationContract;
+use App\Mail\DataTidesMailable;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Message;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class GetTides implements ShouldQueue
 {
@@ -66,6 +70,14 @@ class GetTides implements ShouldQueue
         }
 
         if (!$haveResults) {
+            $errorMailData = [
+                'date' => Carbon::now()->toDateString(),
+                'message' => 'Error getting tide data',
+                'subject' => 'Error Getting Tide Data',
+            ];
+            Mail::to(config('mail.admins'))
+                ->queue(new DataTidesMailable($errorMailData));
+
             Log::error('Couldn\'t get tides. Trying again maybe');
             throw new Exception('Failed getting tides');
         }
@@ -106,5 +118,13 @@ class GetTides implements ShouldQueue
                 });
             });
         });
+
+        $successMailData = [
+            'date' => Carbon::now()->toDateTimeString(),
+            'message' => 'Successfully updated tide data',
+            'subject' => 'Updated Tide Data',
+        ];
+        Mail::to(config('mail.admins'))
+            ->queue(new DataTidesMailable($successMailData));
     }
 }
