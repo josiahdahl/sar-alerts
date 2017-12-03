@@ -1,11 +1,12 @@
 from redis import Redis
 from rq import Queue
+from config import REDIS_HOST, REDIS_QUEUE
 
 from providers import gc_tides_provider as gc
 
-conn = Redis('localhost')
+conn = Redis(REDIS_HOST)
 
-queue = Queue('jobs', connection=conn)
+queue = Queue(REDIS_QUEUE, connection=conn)
 
 
 def add(fn, *args):

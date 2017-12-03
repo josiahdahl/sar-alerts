@@ -2,6 +2,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from config import DATA_TIDES
+
 
 class GCTidesProvider:
     """
@@ -10,7 +12,7 @@ class GCTidesProvider:
     """
 
     def __init__(self, location_id):
-        self.DATA_URL = 'http://tides.gc.ca/eng/station'
+        self.DATA_URL = DATA_TIDES['url']
         self.location_id = location_id
         self.soup = None
         self.tides = []
