@@ -4,12 +4,13 @@
             <section class="widget__body">
                 <div class="widget__status d-flex flex-column"
                      v-for="item in items">
-                    <div class="d-flex">
-                        <img class="widget__status-icon" :src="defaultIcon">
+                    <div class="d-flex flex-wrap">
+                        <img class="widget__status-icon" :src="item.icon">
                         <div class="d-flex flex-column text-center justify-content-center">
                             <div class="widget__status-label display-3">{{item.temperature | toFixed(0) }}&deg;</div>
-                            <div class="widget__status-data h2">{{item.shortDescription}}</div>
+                            <p class="widget__status-data h2 text-capitalize">{{item.main}}</p>
                         </div>
+                        <p class="w-weather__description text-capitalize text-right mb-0 col px-0">{{item.description}}</p>
                     </div>
                 </div>
             </section>
@@ -30,7 +31,6 @@
     data() {
       return {
         state,
-        defaultIcon: '/images/icons/heavy_rain_showers.svg',
         endpoints: null,
       };
     },
@@ -70,10 +70,22 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../sass/variables';
+
+    .widget__status {
+        position: relative;
+    }
 
     .widget__status-icon {
         height: 150px;
         display: block;
         margin: 0 auto;
+    }
+
+    .w-weather__description {
+        position: absolute;
+        bottom: -1rem;
+        left: 0;
+        right: 0;
     }
 </style>
