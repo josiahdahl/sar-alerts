@@ -66,7 +66,6 @@ class AppSeeder extends Seeder
             'widget_id' => $widgetWeatherId,
             'row' => 1,
             'col_sm' => 6,
-            'col_md' => 4,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -77,7 +76,6 @@ class AppSeeder extends Seeder
             'row' => 1,
             'col_xs' => 0,
             'col_sm' => 6,
-            'col_md' => 8,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

@@ -10,11 +10,17 @@ namespace App\Integrations;
 
 use App\Contracts\Integrations\WeatherIntegrationContract;
 use App\LocationDataSource;
+use function base64_encode;
 use Carbon\Carbon;
+use ErrorException;
+use function file_get_contents;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use function is_file;
+use const PATHINFO_EXTENSION;
+use function public_path;
 
 class OpenWeatherMapIntegration implements WeatherIntegrationContract
 {
@@ -160,12 +166,28 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
      */
     private function successResponse(Array $response, $created)
     {
+
+        $iconName = $this->mapIcon($response['weather'][0]['icon']);
+
+        $iconPath = public_path('images/icons/weather/' . $iconName);
+
+        try {
+            $icon = $this->imgToBase64($iconPath);
+        } catch (ErrorException $e) {
+            Log::error("{$e->getMessage()}. OWM ID {$iconName}");
+            $icon = $this->imgToBase64(
+                public_path('images/icons/weather/' . $this->mapIcon('01d'))
+            );
+        }
+
         return [
-            'shortDescription' => $response['weather'][0]['main'],
+            'main' => $response['weather'][0]['main'],
+            'description' => $response['weather'][0]['description'],
             'temperature' => $response['main']['temp'],
             'windSpeed' => number_format(self::M_TO_KNOTS * $response['wind']['speed'], 1),
             'windDirection' => $this->windFromDeg(isset($response['wind']['deg']) ? $response['wind']['deg'] : null),
             'city' => $response['name'],
+            'icon' => $icon,
             'created' => $created,
         ];
     }
@@ -180,5 +202,70 @@ class OpenWeatherMapIntegration implements WeatherIntegrationContract
             'status' => $response['cod'],
             'message' => $response['message']
         ];
+    }
+
+    /**
+     * Map an OWM icon code to the corresponding SVG icon
+     * @param $iconCode
+     * @return string Icon name, with an appropriate default if none exists.
+     */
+    private function mapIcon($iconCode)
+    {
+        $mapping = [
+            /* Clear Sky - 01d */
+            '01d' => 'sunny.svg',
+            '01n' => 'clear_night.svg',
+
+            /* Few Clouds */
+            '02d' => 'sunny_intervals.svg',
+            '02n' => 'clear_night_intervals.svg',
+
+            /* Scattered Clouds */
+            '03d' => 'white_cloud.svg',
+            '03n' => 'white_cloud.svg',
+
+            /* Broken Clouds */
+            '04d' => 'black_low_cloud.svg',
+            '04n' => 'black_low_cloud.svg',
+
+            /* Shower Rain */
+            '09d' => 'light_rain_showers.svg',
+            '09n' => 'light_rain_showers.svg',
+            // '' => 'heavy_rain_showers.svg',
+
+
+            /* Rain */
+            '10d' => 'cloudy_with_light_rain.svg',
+            '10n' => 'cloudy_with_light_rain.svg',
+//            '' => 'cloudy_with_heavy_rain.svg',
+//            '' => 'cloudy_with_sleet.svg',
+//            '' => 'sleet_showers.svg',
+
+            /* Thunderstorm */
+            '11d' => 'thunderstorms.svg',
+            '11n' => 'thunderstorms.svg',
+//            '' => 'thundery_showers.svg',
+
+            /* Snow */
+            '13d' => 'cloudy_with_light_snow.svg',
+            '13n' => 'cloudy_with_light_snow.svg',
+            // '' => 'cloudy_with_heavy_snow.svg',
+            // '' => 'heavy_snow_showers.svg',
+            // '' => 'light_snow_showers.svg',
+
+            /* Mist */
+            '50d' => 'mist.svg',
+            '50n' => 'mist.svg',
+//            '' => 'fog.svg',
+        ];
+        return isset($mapping[$iconCode]) ? $mapping[$iconCode] : $mapping['09d'];
+    }
+
+    private function imgToBase64($imgPath)
+    {
+        $type = pathinfo($imgPath, PATHINFO_EXTENSION);
+        $data = file_get_contents($imgPath);
+        // TODO: If adding image that aren't SVGs, this needs to be updated
+        return "data:image/svg+xml;base64," . base64_encode($data);
     }
 }

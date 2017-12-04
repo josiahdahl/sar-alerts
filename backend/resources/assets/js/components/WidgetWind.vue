@@ -39,7 +39,8 @@
         return this.dataSources.reduce((items, source) => {
           const item = this.state.appData[source.dataType][source.locationId];
           if (item) {
-            items.push(item);
+            const windDirection = item.windDirection !== "" ? item.windDirection : 'CALM';
+            items.push(Object.assign({}, item, { windDirection }));
           }
           return items;
         }, []);
