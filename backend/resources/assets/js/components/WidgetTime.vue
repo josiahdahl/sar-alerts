@@ -55,7 +55,7 @@
 //      this.dateTime = new Date();
       this.endpoint = this.dataSources[0].endpoint;
       api.get(this.endpoint).then(() => {
-        api.schedule(this.endpoint);
+        api.schedule(this.endpoint, api.SECOND * 30);
         api.startHeartbeat(this.endpoint);
       });
 
