@@ -71,7 +71,7 @@ class GetTides implements ShouldQueue
 
         if (!$haveResults) {
             $errorMailData = [
-                'date' => Carbon::now()->toDateString(),
+                'date' => Carbon::now()->toIso8601String(),
                 'message' => 'Error getting tide data',
                 'subject' => 'Error Getting Tide Data',
             ];
@@ -120,7 +120,7 @@ class GetTides implements ShouldQueue
         });
 
         $successMailData = [
-            'date' => Carbon::now()->toDateTimeString(),
+            'date' => Carbon::now()->toIso8601String(),
             'message' => 'Successfully updated tide data',
             'subject' => 'Updated Tide Data',
         ];

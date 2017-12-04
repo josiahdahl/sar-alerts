@@ -11,6 +11,9 @@
 |
 */
 
+use App\Mail\DataTidesMailable;
+use Carbon\Carbon;
+
 Auth::routes();
 
 Route::get('/', 'AppController@index')->name('app');

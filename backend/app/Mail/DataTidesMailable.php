@@ -11,10 +11,7 @@ class DataTidesMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $message;
-    public $date;
-    public $subject;
-
+    public $data;
     /**
      * Create a new message instance.
      *
@@ -22,9 +19,7 @@ class DataTidesMailable extends Mailable
      */
     public function __construct($data)
     {
-        $this->message = $data['message'];
-        $this->date = $data['date'];
-        $this->subject = $data['subject'];
+        $this->data = $data;
     }
 
     /**
@@ -35,10 +30,10 @@ class DataTidesMailable extends Mailable
     public function build()
     {
         return $this->view('emails.data-tides')
-            ->subject($this->subject)
+            ->subject($this->data['subject'])
             ->with([
-                'message' => $this->message,
-                'date' => $this->date,
+                'messageContent' => $this->data['message'],
+                'date' => $this->data['date'],
             ]);
     }
 }
