@@ -93,7 +93,7 @@
       },
       nextTide() {
         return this.tides.find(tide => {
-          return isAfter(new Date(`${tide.date} ${tide.time} ${tide.timezone}`), new Date(this.currentTime));
+          return isAfter(parse(`${tide.date} ${tide.time} ${tide.timezone}`), parse(this.currentTime));
         });
       },
       tideState() {
