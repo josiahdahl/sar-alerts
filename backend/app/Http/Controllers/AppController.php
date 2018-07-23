@@ -8,6 +8,7 @@ use App\LayoutWidget;
 use App\LocationDataSource;
 use App\Station;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AppController extends Controller
 {
@@ -158,8 +159,11 @@ class AppController extends Controller
 
     public function triggerTidesData()
     {
+        /** @var LocationDataSource $tideSources */
         $tideSources = LocationDataSource::where('provides', 'tides')->get();
+        Log::debug('Found the following tide sources' . $tideSources);
         $tideSources->each(function ($tideSource) {
+            Log::debug('Getting tide data for ' . $tideSource->dataSource->name);
             GetTides::dispatch($tideSource);
         });
     }
