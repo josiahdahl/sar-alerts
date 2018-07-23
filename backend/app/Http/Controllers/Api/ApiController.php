@@ -9,12 +9,6 @@ class ApiController extends Controller
 {
     public function response($status = 200, $data = [], $message = 'Success')
     {
-        $response = [
-            'status' => $status,
-            'data' => $data,
-            'message' => $message,
-        ];
-
-        return response()->json($response, $status);
+        return response()->json($status, $data);
     }
 }

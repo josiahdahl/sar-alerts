@@ -68,7 +68,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '../../sass/variables';
+    /*@import '../../sass/variables';*/
 
     .widget {
         height: 100%;
@@ -80,11 +80,10 @@
 
     .w-time {
         display: none;
-        @include media-breakpoint-up(sm) {
+        @media (min-width: 768px) {
             display: flex;
             font-size: 1.2rem;
         }
-
         &__time {
             font-size: 3em;
         }

@@ -7,8 +7,13 @@ use App\Jobs\GetTides;
 use App\LayoutWidget;
 use App\LocationDataSource;
 use App\Station;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use function microtime;
 
 class AppController extends Controller
 {
@@ -17,40 +22,32 @@ class AppController extends Controller
     {
         // TODO: Don't hardcode this
         $stationId = 1;
+        $station = Station::with([
+            'widgets.data',
+            'location',
+        ])->find($stationId);
 
-        // TODO: Cache this
-        $layoutData = LayoutWidget::with(['widget', 'widgetDataSource.locationDataSource'])
-            ->where('station_id', $stationId)
-            ->orderBy('row')
-            ->get();
+        $location = $station->location;
 
-        $layout = $layoutData->reduce(function ($rows, $col) {
-            $row = $col->row - 1;
-            $widget = $col->widget->component_name;
-            $sizes = $col->sizes;
-            $dataSources = $col->widgetDataSource->map(function ($dataSource) {
-                return [
-                    'endpoint' => $dataSource->locationDataSource->endpoint,
-                    'locationId' => $dataSource->locationDataSource->location_id,
-                    'dataType' => $dataSource->locationDataSource->provides,
-                ];
-            });
+        $localTime = Carbon::now()->timezone($location->timezone)->toIso8601String();
 
-            $colData = [
-                'widget' => $widget,
-                'sizes' => $sizes,
-                'dataSources' => $dataSources,
-            ];
+        /** @var Collection $widgets */
+        $widgets = $station->widgets;
 
-            if (!isset($rows[$row])) {
-                $rows[$row] = [];
-            }
-            array_push($rows[$row], $colData);
-            return $rows;
-        }, []);
 
-        return view('app', ['data' => json_encode(['layout' => $layout])]);
+        $data = $widgets->pluck('data')->flatten()
+            ->unique('endpoint')
+            ->map(function ($value) {
+                return collect($value)->forget(['pivot', 'id', 'data_source_id', 'location_identifier', 'created_at', 'updated_at']);
+            })
+            ->groupBy('provides')
+            ->put('localTime', $localTime)
+            ->put('station', [
+                'id' => $station->id,
+                'name' => $station->name,
+            ]);
 
+        return view('app', ['data' => json_encode(['data' => $data])]);
     }
 
     public function indexOld(Request $request, OpenWeatherMapIntegration $owm)

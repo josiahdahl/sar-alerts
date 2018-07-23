@@ -17,8 +17,8 @@
         "vue": "^2.1.10"
     },
     "dependencies": {
-        "bootstrap": "4.0.0-beta",
         "chart.js": "^2.7.1",
-        "date-fns": "^1.29.0"
+        "date-fns": "^1.29.0",
+        "tailwindcss": "^0.6.4"
     }
 }

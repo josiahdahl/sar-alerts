@@ -13,4 +13,14 @@ use Illuminate\Database\Eloquent\Model;
 class Station extends Model
 {
     protected $guarded = ['id'];
+
+    public function widgets()
+    {
+        return $this->hasMany(LayoutWidget::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 }

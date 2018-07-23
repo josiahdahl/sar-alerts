@@ -23,6 +23,14 @@ class LayoutWidget extends Model
         return $this->hasMany('App\WidgetDataSource');
     }
 
+    public function data()
+    {
+        return $this->belongsToMany(
+            LocationDataSource::class,
+            'widget_data_sources'
+        );
+    }
+
     public function getSizesAttribute()
     {
         return [

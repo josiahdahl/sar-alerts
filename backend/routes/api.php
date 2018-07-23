@@ -32,6 +32,8 @@ Route::namespace('Api')->group(function () {
             Route::get('{locationId}/notices', 'NoticesController@get');
             Route::get('{id}/time', 'TimeController@get');
         });
+
+        Route::get('station/{id}/notices', 'StationNoticeController@view');
     });
 });
 

@@ -6,19 +6,19 @@ import WidgetWind from './components/WidgetWind.vue';
 import WidgetNotice from './components/WidgetNotice.vue';
 import WidgetTides from './components/WidgetTides.vue';
 import DataAge from './components/DataAge.vue';
+import Dashboard from './containers/Dashboard';
 
 new Vue({
   el: '#app',
-  data: {
-    layout: window.pageData.layout,
-  },
-  components: {
-    Widget,
-    WidgetWeather,
-    WidgetTime,
-    WidgetWind,
-    WidgetNotice,
-    WidgetTides,
-    DataAge,
-  },
+
+  render: h => h(Dashboard),
+  // components: {
+  //   Widget,
+  //   WidgetWeather,
+  //   WidgetTime,
+  //   WidgetWind,
+  //   WidgetNotice,
+  //   WidgetTides,
+  //   DataAge,
+  // },
 });

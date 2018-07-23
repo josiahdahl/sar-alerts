@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+const tailwindcss = require('tailwindcss');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,9 +13,11 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
+    // .sass('resources/assets/sass/app.scss', 'public/css')
+    .postCss('resources/assets/styles/app.pcss', 'public/css', [
+        tailwindcss('./tailwind.js'),
+    ])
     .extract(['vue', 'chart.js', 'moment']);
-;
 
 if (!mix.inProduction()) {
   mix.sourceMaps();

@@ -13,6 +13,11 @@ class Location extends Model
 {
     protected $guarded = ['id'];
 
+    public function stations()
+    {
+        return $this->hasMany(Station::class);
+    }
+
     public function dataSources()
     {
         return $this->hasMany('App\LocationDataSource');
