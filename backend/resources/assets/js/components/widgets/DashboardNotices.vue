@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <WidgetHeader>Alerts</WidgetHeader>
+    <Widget title="Alerts">
         <DashboardNotice v-if="warnings"
                          v-for="(warning, i) of warnings"
                          :key="i"
@@ -12,12 +11,13 @@
                          :summary="forecast.summary"
                          :updated="forecast.updated"
                          variant="info"></DashboardNotice>
-    </div>
+    </Widget>
+
 </template>
 
 <script>
   import DashboardNotice from './DashboardNotice'
-  import WidgetHeader from './common/WidgetHeader';
+  import Widget from './common/Widget';
 
   export default {
     name: 'DashboardNotices',
@@ -27,7 +27,7 @@
     },
     components: {
       DashboardNotice,
-      WidgetHeader,
+      Widget,
     },
   }
 </script>

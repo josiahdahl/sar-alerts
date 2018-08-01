@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-2xl text-white border-white border-b text-capitalize mb-4 pb-1 pl-2">
+    <h2 class="text-xl text-white border-white border-b uppercase mb-4 pb-1 font-light">
         <slot></slot>
     </h2>
 </template>

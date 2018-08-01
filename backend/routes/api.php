@@ -33,7 +33,8 @@ Route::namespace('Api')->group(function () {
             Route::get('{id}/time', 'TimeController@get');
         });
 
-        Route::get('station/{id}/notices', 'StationNoticeController@view');
+        Route::get('stations/{id}/notices', 'StationNoticeController@view');
+        Route::get('stations/{id}/tides', 'StationTidesController@view');
     });
 });
 
