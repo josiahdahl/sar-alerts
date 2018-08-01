@@ -46,4 +46,9 @@ class LocationDataSource extends Model
     {
         return "/api/v1/locations/{$this->location_id}/{$this->provides}";
     }
+
+    public function tides()
+    {
+        return $this->hasMany(DataTide::class);
+    }
 }

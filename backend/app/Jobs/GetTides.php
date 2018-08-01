@@ -103,17 +103,19 @@ class GetTides implements ShouldQueue
                 // Remove old records for the day
                 DataTide::where([
                     ['location_data_source_id', $locationDataSourceId],
-                    ['date', $tidesOnDay[0]['date']],
+                    ['time', Carbon::parse("{$tidesOnDay[0]['date']} {$tidesOnDay[0]['time']}", $tidesOnDay[0]['timezone'])],
                 ])->delete();
                 collect($tidesOnDay)->each(function ($tide) {
-                    $newTide = DataTide::create([
+                    Log::debug('Timezone: ' . $tide['timezone']);
+                    $dataArray = [
                         'location_data_source_id' => $this->locationDataSource->id,
-                        'date' => $tide['date'],
-                        'time' => $tide['time'],
-                        'timezone' => $tide['timezone'],
+                        'time' => Carbon::parse("{$tide['date']} {$tide['time']}"),
+                        'tz' => $tide['timezone'],
                         'height' => $tide['height'],
                         'high_low' => $tide['high_low'],
-                    ]);
+                    ];
+                    Log::debug($dataArray);
+                    $newTide = DataTide::create($dataArray);
                     Log::info('Added tide data for ' . $tide['date']);
                 });
             });
